@@ -472,7 +472,7 @@ function InfoPanel({level,data}) {
 
 function NarrativeOverlay({level}) {
   const t = [{ch:"Chapter 1",title:"The National Picture",body:"States where residents vote more tend to have lower uninsured rates and higher life expectancies. Hover any colored state. Click New York to zoom in."},
-    {ch:"Chapter 2",title:"12 Miles, 12 Years",body:"In NYC, the gap between a life expectancy of 89.9 and 75.1 is a single subway ride. Hover neighborhoods, then click the pulsing dot in the Bronx."},
+    {ch:"Chapter 2",title:"12 Miles, 12 Years",body:"In NYC, the gap between a life expectancy of 89.9 and 75.1 is a single subway ride. Hover over neighborhoods, and then click the pulsing dot in the Bronx."},
     {ch:"Chapter 3",title:"Inside the Walls",body:"Every department tells a story about civic power — or its absence. Hover rooms for details. Click any person to follow their story."}][level];
   if(!t) return null;
   return(<div style={{position:"absolute",left:16,bottom:16,maxWidth:280,zIndex:50,background:"rgba(250,248,243,0.94)",backdropFilter:"blur(6px)",padding:"16px 20px",border:"1px solid #e5e1d8"}}>
