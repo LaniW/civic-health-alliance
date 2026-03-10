@@ -324,11 +324,15 @@ function NYCMap({ hovered, onHover, onZoomCenter }) {
         <text x={3} y={12.5} style={{fontSize:3.2,fontFamily:"'Playfair Display',Georgia,serif",fill:"#dc2626",fontWeight:800}}>{worst.le}</text>
         <text x={14} y={12.5} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#6b7280"}}>{worst.name}</text>
       </g>
-      <g transform="translate(90,84)">
+      <g transform="translate(91.5,75)">
+        <rect x={-3} y={-2} width={54} height={21.5} rx={1} fill="rgba(26,26,26,0.88)"/>
         <text y={2} style={{fontSize:2,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>Life expectancy (years)</text>
         {[["#dc2626","< 79"],["#eab308","79–81"],["#65a30d","82–85"],["#15803d","86+"]].map(([c,l],i)=>(
           <g key={i} transform={`translate(${i*14},4)`}><rect width={3} height={3} rx={0.5} fill={c}/><text x={4} y={2.6} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{l}</text></g>
         ))}
+        <text y={11} style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999",letterSpacing:0.3}}>SOURCES</text>
+        <a href="https://equity.nyc.gov/domains/empowered-residents-and-neighborhoods/voter-turnout-rate" target="_blank"><text y={14} style={{fontSize:1.4,fontFamily:"'JetBrains Mono',monospace",fill:"#518ef6",textDecoration:"underline",cursor:"pointer"}}>Voter Turnout — NYC Equity, 2024</text></a>
+        <a href="https://www.nyc.gov/assets/doh/downloads/pdf/vs/2023sum.pdf" target="_blank"><text y={17} style={{fontSize:1.4,fontFamily:"'JetBrains Mono',monospace",fill:"#518ef6",textDecoration:"underline",cursor:"pointer"}}>Life Expectancy — NYC DOHMH, 2023</text></a>
       </g>
     </svg>
   );
