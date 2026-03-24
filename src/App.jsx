@@ -549,7 +549,7 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
 
       {/* departments */}
       {DEPARTMENTS.map(d=>{const isH=hoveredDept===d.id;return(
-        <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)}>
+        <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)} onTouchEnd={()=>onHoverDept(null)} onTouchCancel={()=>onHoverDept(null)}>
           <rect x={d.x} y={d.y} width={d.w} height={d.h} rx={0.8} fill={isH?"#fff":"rgba(255,255,255,0.5)"} stroke={sevColor[d.severity]} strokeWidth={isH?0.7:0.35} strokeDasharray={d.severity==="critical"?"1.2,0.6":"none"} style={{transition:"all 0.15s"}}/>
           <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
           {d.metric&&<>
@@ -561,7 +561,8 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
 
       {/* people */}
       {HOSPITAL_PEOPLE.map(p=>(
-        <g key={p.id} onMouseEnter={()=>onHoverPerson(p.id)} onMouseLeave={()=>onHoverPerson(null)} onClick={()=>onClickPerson(p.id)} style={{cursor:"pointer"}}>
+        <g key={p.id} onMouseEnter={()=>onHoverPerson(p.id)} onMouseLeave={()=>onHoverPerson(null)} onTouchEnd={()=>onHoverPerson(null)} onTouchCancel={()=>onHoverPerson(null)} onClick={()=>onClickPerson(p.id)} style={{cursor:"pointer"}}>
+          <rect x={p.x-6} y={p.y-2} width={12} height={12} fill="transparent" style={{cursor:"pointer"}}/>
           <PersonFig x={p.x} y={p.y} color={p.color} variant={p.id==="dr-saffo"?"doctor":"adult"}/>
           <Pulse cx={p.x} cy={p.y-3} r={0.8} color={p.color}/>
           {hoveredPerson===p.id&&<g>
