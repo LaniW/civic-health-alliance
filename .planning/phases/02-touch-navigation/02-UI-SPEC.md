@@ -45,8 +45,8 @@ Declared values (must be multiples of 4):
 
 **Exceptions:**
 - Touch targets: minimum 44px height/width on all interactive elements (NAV-01, NAV-02). This is a hard floor enforced via `minHeight:44, minWidth:44` on buttons. 44 is not on the 8-point scale but is the iOS HIG / Google Material / WCAG 2.5.8 touch target minimum.
-- NavBar height: 61px (existing, unchanged). Exceeds the 44px minimum — no change needed.
-- MapBtn width: 208px (existing, unchanged) at height 45px. The 45px is already above 44px — no change needed.
+- NavBar height: 61px (existing, unchanged) — legacy value from initial build; no change required. Exceeds the 44px minimum.
+- MapBtn height: 45px (existing, unchanged) — legacy value from initial build; meets 44px touch minimum.
 - LeftPanel Back button: currently `padding:"10px 20px"` + `fontSize:12` gives ~38px computed height. Must be upgraded to `padding:"14px 20px"` to reach 46px minimum, OR add `minHeight:44`.
 
 **Source:** REQUIREMENTS.md NAV-01 "44px+ touch target"; RESEARCH.md Architecture Patterns NAV-01 section.
@@ -55,20 +55,17 @@ Declared values (must be multiples of 4):
 
 ## Typography
 
+Phase 2 adds two new interactive elements: a back arrow button in the NavBar and a tappable Health Center breadcrumb button. Only those new elements are specified here.
+
 | Role | Font | Size | Weight | Line Height | Usage |
 |------|------|------|--------|-------------|-------|
-| NavBar brand | Libre Franklin | 15px | 900 | normal | "Civic Health Alliance" wordmark button |
-| NavBar map tab | Libre Franklin | 16px | 600 italic | normal | "United States Map", "New York City Map" tab labels |
-| NavBar breadcrumb | Libre Franklin | 13px | 600 italic | normal | "Health Center", "Story" breadcrumb labels |
-| NavBar back arrow | Libre Franklin | 20px | 700 | normal | ← glyph in back arrow button |
-| Body text | Libre Franklin | 13–14px | 400 | 1.75 | LeftPanel chapter body, PersonStory bio paragraphs |
-| Label | Libre Franklin | 12px | 700 | normal | CTA text, button labels ("BACK", "NEXT") |
-| Data value | JetBrains Mono | 11–13px | 700 | normal | Stats displayed in hover cards |
-| Metadata | JetBrains Mono | 9–10px | 400 | 1.9 | Source citations, borough codes |
+| NavBar back arrow glyph | Libre Franklin | 20px | 700 | normal | ← glyph in back arrow button (NAV-01) |
+| Health Center breadcrumb button | Libre Franklin | 13px | 600 italic | normal | Tappable breadcrumb at level 3 (NAV-02), matches existing span style |
+| Inherited from codebase | — | — | — | — | All other text roles (body, labels, data values, metadata) are unchanged; see CLAUDE.md Font System table for the full inventory |
 
-**Sizing rationale:** Typography is entirely pre-determined by the existing codebase. Phase 2 adds no new text roles — only new interactive wrappers (buttons) around existing text and a new back arrow glyph.
+**Sizing rationale:** Phase 2 introduces no new text roles beyond the two rows above. The back arrow glyph reuses the existing NavBar button weight (700). The Health Center button matches the pre-existing breadcrumb span style exactly (13px / 600 italic).
 
-**Source:** CLAUDE.md Font System table; src/App.jsx lines 636–690 (NavBar), lines 419–445 (LeftPanel nav buttons).
+**Source:** CLAUDE.md Font System table; src/App.jsx lines 636–690 (NavBar).
 
 ---
 
@@ -94,6 +91,12 @@ Declared values (must be multiples of 4):
 - Back arrow button in NavBar (inherits same RED as LeftPanel Back)
 
 **Source:** CLAUDE.md Color System; src/App.jsx lines 6–8 (RED, CREAM, CREAM2 constants), lines 636–690 (NavBar).
+
+---
+
+## Visual Hierarchy
+
+Visual hierarchy is unchanged from the existing codebase. Focal point on the primary screen (US hex map, level 0) is the colored state grid as established in existing code. Phase 2 adds only interactive wrappers (buttons) to existing NavBar elements; it does not alter any visual hierarchy or layout.
 
 ---
 
