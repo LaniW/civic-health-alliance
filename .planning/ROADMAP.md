@@ -54,11 +54,10 @@ Plans:
   1. Every person figure is visually centered within the bounds of its assigned department room
   2. No text overlaps between department labels, wait times, or room notes at any supported viewport size
   3. Every person figure has a tap target of at least 44px equivalent in SVG units, responding to touch without requiring precise finger placement
-**Plans**: TBD
-**UI hint**: yes
+**Plans:** 1 plan
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md -- Fix person figure coordinates (centering + overlap) and add invisible touch target rects
 
 ### Phase 4: Real Content and Data Verification
 **Goal**: The visualization tells real stories from clinical experience and displays statistics that match their cited primary sources exactly
