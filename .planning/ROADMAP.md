@@ -12,7 +12,7 @@ Refine the Civic Health Alliance from a working four-level visualization with pl
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Story Data Decoupling** - Decouple PersonStory from hard-coded person IDs so story content is data-driven
+- [x] **Phase 1: Story Data Decoupling** - Decouple PersonStory from hard-coded person IDs so story content is data-driven (completed 2026-03-24)
 - [ ] **Phase 2: Touch Navigation** - Add back arrow, tappable breadcrumbs, swipe navigation, and touch optimizations to NavBar
 - [ ] **Phase 3: Hospital Scene Layout** - Center person figures, fix text overlaps, and add touch-friendly tap targets in the hospital SVG
 - [ ] **Phase 4: Real Content and Data Verification** - Replace fictional stories with real patient experiences and verify all stats against cited sources
@@ -26,10 +26,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Success Criteria** (what must be TRUE):
   1. PersonStory component renders summary, timeline, and narrative from data fields on the person object -- not from conditional checks on person.id
   2. Changing a person's id in HOSPITAL_PEOPLE does not break or blank their story display
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 01-01-PLAN.md -- Add summary field to HOSPITAL_PEOPLE and replace person.id conditionals in PersonStory
+- [x] 01-01-PLAN.md -- Add summary field to HOSPITAL_PEOPLE and replace person.id conditionals in PersonStory
 
 ### Phase 2: Touch Navigation
 **Goal**: Users can navigate the full four-level hierarchy forward and backward using only touch gestures -- no mouse, no browser back button required
@@ -82,7 +82,7 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Story Data Decoupling | 0/1 | Not started | - |
+| 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
 | 2. Touch Navigation | 0/1 | Not started | - |
 | 3. Hospital Scene Layout | 0/1 | Not started | - |
 | 4. Real Content and Data Verification | 0/1 | Not started | - |

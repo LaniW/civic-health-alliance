@@ -22,7 +22,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Stories
 
-- [ ] **STORY-01**: PersonStory component uses data fields instead of hard-coded person ID checks
+- [x] **STORY-01**: PersonStory component uses data fields instead of hard-coded person ID checks
 - [ ] **STORY-02**: Patient stories reflect real experiences from Stella Saffo's clinical transcript (Medicaid/pancreatitis, HIV care continuity, pregnant person housing)
 
 ### Data Verification
@@ -70,7 +70,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOSP-01 | Phase 3 | Pending |
 | HOSP-02 | Phase 3 | Pending |
 | HOSP-03 | Phase 3 | Pending |
-| STORY-01 | Phase 1 | Pending |
+| STORY-01 | Phase 1 | Complete |
 | STORY-02 | Phase 4 | Pending |
 | DATA-01 | Phase 4 | Pending |
 | DATA-02 | Phase 4 | Pending |

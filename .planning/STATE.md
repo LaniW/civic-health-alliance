@@ -2,16 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-24T21:09:18.081Z"
-last_activity: 2026-03-24 -- Roadmap created
+status: Phase complete — ready for verification
+stopped_at: Completed 01-story-data-decoupling 01-01-PLAN.md
+last_updated: "2026-03-24T21:24:05.501Z"
 progress:
   total_phases: 4
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
 ---
 
 # Project State
@@ -21,16 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Accurate, real data and stories -- fully navigable on touch screens
-**Current focus:** Phase 1: Story Data Decoupling
+**Current focus:** Phase 01 — story-data-decoupling
 
 ## Current Position
 
-Phase: 1 of 4 (Story Data Decoupling)
-Plan: 0 of 1 in current phase
-Status: Ready to plan
-Last activity: 2026-03-24 -- Roadmap created
-
-Progress: [..........] 0%
+Phase: 01 (story-data-decoupling) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -52,6 +46,7 @@ Progress: [..........] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 01-story-data-decoupling P01 | 1 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -63,6 +58,7 @@ Recent decisions affecting current work:
 - [Roadmap]: 4-phase structure -- decouple before replace, navigation and layout in parallel, content last
 - [Roadmap]: Phases 2 and 3 can run in parallel after Phase 1 (non-overlapping code regions: NavBar vs HospitalScene)
 - [Roadmap]: STORY-01 isolated in Phase 1 because changing person IDs without decoupling PersonStory causes silent rendering failures
+- [Phase 01-story-data-decoupling]: summary field placed after bg and before timeline in HOSPITAL_PEOPLE; callout box guarded with person.summary falsy check; shared tagline stays hardcoded in PersonStory
 
 ### Pending Todos
 
@@ -76,6 +72,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T21:09:18.080Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-story-data-decoupling/01-CONTEXT.md
+Last session: 2026-03-24T21:24:05.499Z
+Stopped at: Completed 01-story-data-decoupling 01-01-PLAN.md
+Resume file: None
