@@ -21,13 +21,14 @@ The visualization must present accurate, real data and stories — real patient 
 - ✓ Hover interactions showing state/district/person details — existing
 - ✓ Zoom transitions with fade animation between levels — existing
 - ✓ PersonStory renders from data fields (person.summary), not hard-coded person IDs — Validated in Phase 1: Story Data Decoupling
+- ✓ Hospital scene: person figures centered within their department rooms — Validated in Phase 3: Hospital Scene Layout
+- ✓ Hospital scene: no text overlap between labels/metrics and person figures — Validated in Phase 3: Hospital Scene Layout
+- ✓ Hospital scene: 44px+ touch targets on all person figures — Validated in Phase 3: Hospital Scene Layout
 
 ### Active
 
 - [ ] NavBar: back arrow button for touch screen navigation
 - [ ] NavBar: tappable breadcrumbs to navigate to any previous level
-- [ ] Hospital scene: center person figures within their department rooms
-- [ ] Hospital scene: fix text overlap in department labels/room content
 - [ ] Replace fictional character stories (Maria, Dr. Okafor, James, Sofia) with real patient stories from Stella Saffo's transcript
 - [ ] Verify all stats in left panel against cited sources (CDC, KFF, MAP, NYC DOHMH)
 
@@ -76,4 +77,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 1 completion*
+*Last updated: 2026-03-24 after Phase 3 completion*
