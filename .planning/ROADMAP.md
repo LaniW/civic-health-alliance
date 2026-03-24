@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Story Data Decoupling** - Decouple PersonStory from hard-coded person IDs so story content is data-driven (completed 2026-03-24)
 - [ ] **Phase 2: Touch Navigation** - Add back arrow, tappable breadcrumbs, swipe navigation, and touch optimizations to NavBar
-- [ ] **Phase 3: Hospital Scene Layout** - Center person figures, fix text overlaps, and add touch-friendly tap targets in the hospital SVG
+- [x] **Phase 3: Hospital Scene Layout** - Center person figures, fix text overlaps, and add touch-friendly tap targets in the hospital SVG (completed 2026-03-24)
 - [ ] **Phase 4: Real Content and Data Verification** - Replace fictional stories with real patient experiences and verify all stats against cited sources
 
 ## Phase Details
@@ -54,10 +54,10 @@ Plans:
   1. Every person figure is visually centered within the bounds of its assigned department room
   2. No text overlaps between department labels, wait times, or room notes at any supported viewport size
   3. Every person figure has a tap target of at least 44px equivalent in SVG units, responding to touch without requiring precise finger placement
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 03-01-PLAN.md -- Fix person figure coordinates (centering + overlap) and add invisible touch target rects
+- [x] 03-01-PLAN.md -- Fix person figure coordinates (centering + overlap) and add invisible touch target rects
 
 ### Phase 4: Real Content and Data Verification
 **Goal**: The visualization tells real stories from clinical experience and displays statistics that match their cited primary sources exactly
@@ -83,5 +83,5 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 |-------|----------------|--------|-----------|
 | 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
 | 2. Touch Navigation | 0/1 | Not started | - |
-| 3. Hospital Scene Layout | 0/1 | Not started | - |
+| 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
 | 4. Real Content and Data Verification | 0/1 | Not started | - |

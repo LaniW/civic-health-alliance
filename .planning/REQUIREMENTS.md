@@ -16,9 +16,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Hospital Scene
 
-- [ ] **HOSP-01**: Person figures are visually centered within their department rooms
-- [ ] **HOSP-02**: No text overlaps in department labels, wait times, or room notes
-- [ ] **HOSP-03**: Person figures have touch-friendly tap targets (44px+ equivalent in SVG units)
+- [x] **HOSP-01**: Person figures are visually centered within their department rooms
+- [x] **HOSP-02**: No text overlaps in department labels, wait times, or room notes
+- [x] **HOSP-03**: Person figures have touch-friendly tap targets (44px+ equivalent in SVG units)
 
 ### Stories
 
@@ -67,9 +67,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NAV-02 | Phase 2 | Pending |
 | NAV-03 | Phase 2 | Pending |
 | NAV-04 | Phase 2 | Pending |
-| HOSP-01 | Phase 3 | Pending |
-| HOSP-02 | Phase 3 | Pending |
-| HOSP-03 | Phase 3 | Pending |
+| HOSP-01 | Phase 3 | Complete |
+| HOSP-02 | Phase 3 | Complete |
+| HOSP-03 | Phase 3 | Complete |
 | STORY-01 | Phase 1 | Complete |
 | STORY-02 | Phase 4 | Pending |
 | DATA-01 | Phase 4 | Pending |
