@@ -583,13 +583,6 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
 function PersonStory({person}){
   if(!person)return null;
 
-  const closingQuotes={
-    "dr-saffo":"She sees the system from the inside. Every benefit lapse, every contract dispute, every discharged patient — she witnesses it and continues to show up anyway. Her testimony is a record of what policy looks like inside a room.",
-    "patient-one":"He was managing HIV. Pancreatitis was treatable. What ended his life was a Medicaid benefit limit — a policy decision made far from his hospital bed, in rooms shaped by who votes and who shows up.",
-    "patient-two":"He was getting comfortable. A billing dispute between an insurer and a hospital — not his health, not his choices — forced him to start over. Insurance contracts are health policy. Health policy is civic power.",
-    "patient-three":"She got housed because New York has policies other states don't. What feels like luck is actually legislation — shaped by who votes, who testifies, and who organizes. The difference between states is the difference between a roof and none.",
-  };
-
   return(
     <div style={{padding:"28px 24px",maxWidth:640,margin:"0 auto"}}>
       {/* header */}
@@ -625,14 +618,14 @@ function PersonStory({person}){
             <div style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,lineHeight:1.7,color:"#4b5563",borderLeft:`2.5px solid ${tc}25`,paddingLeft:10}}>{t.detail}</div>
           </div>);})}
       </div>
-
-      {/* closing statement */}
+      {person.summary&&(
       <div style={{background:"#1a1a1a",color:"#faf8f3",padding:"28px 24px",marginTop:32,textAlign:"center",border:`1px solid ${RED}`}}>
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:16,fontWeight:700,lineHeight:1.45,marginBottom:10}}>
-          {closingQuotes[person.id]}
+          {person.summary}
         </p>
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,color:"#9ca3af"}}>Civic engagement isn't abstract — it is the mechanism by which need becomes care.</p>
       </div>
+      )}
     </div>
   );
 }
