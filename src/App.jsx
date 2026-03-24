@@ -204,26 +204,24 @@ const HOSPITAL_PEOPLE=[
   {
     id:"dr-saffo",
     name:"Dr. Stella Saffo",
-    role:"HIV & Infectious Disease Physician",
-    x:29,y:36,
+    role:"Healthcare Provider, HIV Specialist",
+    x:29,y:36, // Centered in top-left box
     color:"#2980b9",
-    bg:"An HIV specialist at a community health center in New York, Dr. Saffo cares for some of the city's most vulnerable patients — navigating daily the intersection of public health, insurance policy, and human dignity. These are her patients' stories.",
-    summary:"She sees how insurance gaps, contract disputes, and state policy differences determine who lives — and carries these stories so others might listen.",
+    bg:"A HIV specialist at a health center in New York, Dr. Saffo cares for some of the city's most vulnerable patients, navigating daily the intersection of public health, insurance policy, and human dignity. These are her patients' stories.",
     timeline:[
       {date:"Daily",type:"health",title:"Carrying the weight of these stories",detail:"Dr. Saffo sees the system from the inside. Every discharge, every coverage lapse, every contract dispute — she witnesses them and continues to care for patients anyway."},
-      {date:"Ongoing",type:"civic",title:"Documenting systemic failures",detail:"Physicians like Dr. Saffo are often the only witnesses to how insurance gaps and state policy differences determine who lives, who loses their doctor, and who finds a home."},
-      {date:"Ongoing",type:"civic",title:"What policy looks like in a room",detail:"The difference between New York and North Carolina — in housing benefits for people living with HIV — is not an abstraction. It is whether a mother and her unborn child have a roof."},
-      {date:"Ongoing",type:"health",title:"'It ended up being an insurance issue that killed him.'",detail:"When a Medicaid benefit limit ends a life, it is not a medical failure. It is a policy failure — one made far from the hospital bed, in rooms shaped by who votes and who shows up."},
+      {date:"Ongoing",type:"civic",title:"Documenting systemic failures",detail:"Healthcare providers like Dr. Saffo are often the only witnesses to how insurance gaps and state policy differences determine who lives, who loses their doctor, and who finds a home."},
+      {date:"Ongoing",type:"civic",title:"What policy looks like in a room",detail:"The difference between New York and North Carolina, in housing benefits for people living with HIV, is not an abstraction. It is whether a mother and her unborn child have a roof."},
+      {date:"Ongoing",type:"health",title:"'It ended up being an insurance issue that killed him.'",detail:"When a Medicaid benefit limit ends a life, it is not a medical failure. It is a policy failure. One made far from the hospital bed, in rooms shaped by who votes and who shows up."},
     ]
   },
   {
     id:"patient-one",
-    name:"Patient Story: A Man With Pancreatitis",
+    name:"A Man With Pancreatitis",
     role:"Medicaid Patient Living With HIV",
-    x:60,y:36,
+    x:71,y:36, // Centered in top-right box
     color:"#e74c3c",
     bg:"He was admitted with pancreatitis — a serious but treatable condition. He was managing his HIV well. That was not the crisis. His Medicaid benefits ran out before he recovered. The hospital discharged him home. He died that night.",
-    summary:"His HIV was managed. His pancreatitis was treatable. His Medicaid ran out. He was discharged before recovery and died that night.",
     timeline:[
       {date:"Admission",type:"health",title:"Admitted for pancreatitis",detail:"A treatable condition. He was managing his HIV well — that was not in crisis. The hospitalization was for pancreatitis."},
       {date:"Mid-stay",type:"civic",title:"Medicaid benefits exhausted",detail:"Coverage ran out before his recovery was complete. No extension was granted. The system had a limit, and he had reached it."},
@@ -233,14 +231,13 @@ const HOSPITAL_PEOPLE=[
   },
   {
     id:"patient-two",
-    name:"Patient Story: A Young Man Newly Diagnosed",
+    name:"A Young Man Diagnosed",
     role:"HIV-Positive, Mid-20s",
-    x:72,y:69,
+    x:29,y:69, // Centered in bottom-left box
     color:"#8e44ad",
-    bg:"Diagnosed with HIV in his mid-20s — rare today, when PrEP has made new infections among young people uncommon. He was struggling with the diagnosis. But he was excited about his care. He was getting comfortable. Then an insurance contract dispute ended all of that.",
-    summary:"He was finally comfortable with his HIV care. Then an insurance contract dispute — nothing to do with his health — took his provider away.",
+    bg:"Diagnosed with HIV in his mid-20s, rare today, when PrEP has made new infections among young people uncommon. He was struggling with the diagnosis. But he was excited about his care. He was getting comfortable. Then an insurance contract dispute ended all of that.",
     timeline:[
-      {date:"Last year",type:"health",title:"Diagnosed with HIV in his 20s",detail:"Young people are rarely diagnosed today because of PrEP availability. He was shaken, despondent — but engaging with his care and showing up."},
+      {date:"Last year",type:"health",title:"Diagnosed with HIV in his 20s",detail:"Young people are rarely diagnosed today because of PrEP availability. He was shaken, despondent, but engaging with his care and showing up."},
       {date:"Months in",type:"health",title:"Finding his footing",detail:"He was 'very excited' about his care plan. A good plan, good resources, a provider he trusted. He was stabilizing — medically and emotionally."},
       {date:"Contract dispute",type:"civic",title:"Hospital drops his insurance",detail:"The hospital and his insurer couldn't reach a contract agreement. The dispute had nothing to do with his health or his choices. He lost his provider anyway."},
       {date:"Aftermath",type:"health",title:"Starting over — just as he'd found his footing",detail:"He was 'nervous to have to go to a new HIV doctor.' He'd just gotten comfortable. The relationship that had helped him feel safe — disrupted not by him, but by a billing negotiation between institutions."},
@@ -248,26 +245,26 @@ const HOSPITAL_PEOPLE=[
   },
   {
     id:"patient-three",
-    name:"Patient Story: A Pregnant Woman With HIV",
+    name:"Pregnant Woman With HIV",
     role:"Formerly Homeless, Mother of Six",
-    x:30,y:69,
+    x:71,y:69, // Centered in bottom-right box
     color:"#e67e22",
-    bg:"She came to New York pregnant, homeless, and living with HIV. Five children had been removed by child protective services in North Carolina. She was carrying her sixth. New York State's benefits — tied to HIV status and pregnancy — gave her something her home state never had: a home.",
-    summary:"North Carolina took her children and offered no housing. New York, through policy tied to HIV and pregnancy, gave her a home. The difference was not luck — it was legislation.",
+    bg:"She came to New York pregnant, homeless, and living with HIV. Five children had been removed by child protective services in North Carolina. She was carrying her sixth. New York State's benefits, tied to HIV status and pregnancy, gave her something her home state never had: a home.",
     timeline:[
       {date:"North Carolina",type:"civic",title:"Five children removed by CPS",detail:"She was living with HIV in a state with limited support programs. Her children were removed. She had few pathways to stability."},
-      {date:"Arrived in NY",type:"health",title:"Homeless and pregnant with her sixth child",detail:"She arrived without housing. Managing HIV. Pregnant. The odds were steep — but New York has policies that other states do not."},
-      {date:"New York",type:"civic",title:"Housing secured through state benefits",detail:"New York offers housing support tied to HIV status and pregnancy — a combination of protections not available in North Carolina or many other states. She was housed."},
-      {date:"Today",type:"health",title:"Stable, housed, in care",detail:"'Lucky for her, New York State offers some good benefits,' Dr. Saffo said. What feels like luck is actually policy — and policy is shaped by who votes, who testifies, and who organizes."},
+      {date:"Arrived in NY",type:"health",title:"Homeless and pregnant with her sixth child",detail:"She arrived without housing. Managing HIV. Pregnant. The odds were steep, but New York has policies that other states do not."},
+      {date:"New York",type:"civic",title:"Housing secured through state benefits",detail:"New York offers housing support tied to HIV status and pregnancy, a combination of protections not available in North Carolina or many other states. She was housed."},
+      {date:"Today",type:"health",title:"Stable, housed, in care",detail:"'Lucky for her, New York State offers some good benefits,' Dr. Saffo said. What feels like luck is actually policy, and policy is shaped by who votes, who testifies, and who organizes."},
     ]
   },
 ];
 
 const DEPARTMENTS=[
-  {id:"hivid",label:"HIV / Infectious Disease",x:14,y:22,w:30,h:28,metric:"3 providers",metricLabel:"850+ patients each",severity:"high",note:"Continuity of care = survival"},
-  {id:"insurance",label:"Insurance Navigation",x:56,y:22,w:32,h:28,metric:"CONTRACT",metricLabel:"disputes disrupt care",severity:"critical",note:"Network gaps cost lives"},
-  {id:"maternal",label:"Maternal & HIV Care",x:46,y:55,w:28,h:28,metric:"NY vs. NC",metricLabel:"policy gap",severity:"medium",note:"State law determines access"},
-  {id:"casemanagement",label:"Benefits & Housing",x:18,y:55,w:24,h:28,metric:"MEDICAID",metricLabel:"benefit limits",severity:"high",note:"Coverage gaps = discharge"},
+  // Widened boxes (w:36) and shortened text strings so everything fits perfectly
+  {id:"hivid",label:"Infectious Disease",x:11,y:22,w:36,h:28,metric:"PROVIDERS",metricLabel:" ",severity:"high",note:"Care = survival"},
+  {id:"insurance",label:"Insurance Navigation",x:53,y:22,w:36,h:28,metric:"CONTRACTS",metricLabel:" ",severity:"critical",note:"Network gaps cost lives"},
+  {id:"casemanagement",label:"Benefits & Housing",x:11,y:55,w:36,h:28,metric:"MEDICAID",metricLabel:" ",severity:"high",note:"Coverage gaps = discharge"},
+  {id:"maternal",label:"Maternal & HIV Care",x:53,y:55,w:36,h:28,metric:"NY vs. NC",metricLabel:" ",severity:"medium",note:"Laws determine access"},
 ];
 
 const sevColor={low:"#a3a3a3",medium:"#f59e0b",high:"#ea580c",critical:RED};
@@ -301,7 +298,7 @@ function Pulse({cx,cy,r=6,color=RED}){
 const CHAPTERS=[
   {ch:"Chapter 1",title:"The National Picture",body:"States where residents vote more tend to have lower uninsured rates and higher life expectancies. The correlation is striking — and it's not coincidental. Local health policy is shaped by who shows up at the ballot box, who testifies at hearings, and who organizes their neighbors.",cta:"Hover any colored state. Click New York to zoom in."},
   {ch:"Chapter 2",title:"12 Miles, 12 Years",body:"In New York City, the gap between a life expectancy of 89.9 and 75.1 is a single subway ride. Neighborhoods with higher voter turnout consistently invest more in preventive care, mental health services, and community clinics — turning ballots into years of life.",cta:"Hover over neighborhoods. Click the pulsing dot in the Bronx."},
-  {ch:"Chapter 3",title:"Inside the Walls",body:"Every story in this health center shows how policy shapes survival. Medicaid benefit limits, hospital-insurer contract disputes, and state-level decisions about who gets housing — these determine who lives, who loses their provider, and who finds a home. Dr. Stella Saffo witnesses these outcomes daily.",cta:"Hover rooms for data. Click any person to explore their story."},
+  {ch:"Chapter 3",title:"Inside the Walls",body:"Every story in this health center shows how policy shapes survival. Medicaid benefit limits, hospital-insurer contract disputes, and state-level decisions about who gets housing. These determine who lives, who loses their provider, and who finds a home. Dr. Stella Saffo witnesses these outcomes daily.",cta:"Hover rooms for data. Click any person to explore their story."},
 ];
 
 function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
@@ -544,19 +541,21 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
 
       {/* floor divider */}
       <line x1={6} y1={52} x2={94} y2={52} stroke="#c8c3b8" strokeWidth={0.3}/>
-      <text x={9} y={19} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>2F</text>
-      <text x={9} y={57} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>1F</text>
+      
+      {/* Shifted floor markers out to x=2.5 so they sit cleanly in the margin */}
+      <text x={2.5} y={19} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>2F</text>
+      <text x={2.5} y={57} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>1F</text>
 
       {/* departments */}
       {DEPARTMENTS.map(d=>{const isH=hoveredDept===d.id;return(
         <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)}>
           <rect x={d.x} y={d.y} width={d.w} height={d.h} rx={0.8} fill={isH?"#fff":"rgba(255,255,255,0.5)"} stroke={sevColor[d.severity]} strokeWidth={isH?0.7:0.35} strokeDasharray={d.severity==="critical"?"1.2,0.6":"none"} style={{transition:"all 0.15s"}}/>
-          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
+          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:1.8,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
           {d.metric&&<>
-            <text x={d.x+d.w/2} y={d.y+9} textAnchor="middle" style={{fontSize:3.2,fontFamily:"'JetBrains Mono',monospace",fill:d.severity==="critical"?RED:d.severity==="high"?"#ea580c":"#059669",fontWeight:700}}>{d.metric}</text>
-            <text x={d.x+d.w/2} y={d.y+12} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.metricLabel}</text>
+            <text x={d.x+d.w/2} y={d.y+9} textAnchor="middle" style={{fontSize:2.8,fontFamily:"'JetBrains Mono',monospace",fill:d.severity==="critical"?RED:d.severity==="high"?"#ea580c":"#059669",fontWeight:700}}>{d.metric}</text>
+            <text x={d.x+d.w/2} y={d.y+12} textAnchor="middle" style={{fontSize:1.3,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.metricLabel}</text>
           </>}
-          <text x={d.x+d.w/2} y={d.y+d.h-2.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.note}</text>
+          <text x={d.x+d.w/2} y={d.y+d.h-2.5} textAnchor="middle" style={{fontSize:1.3,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.note}</text>
         </g>);})}
 
       {/* people */}
@@ -565,9 +564,9 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
           <PersonFig x={p.x} y={p.y} color={p.color} variant={p.id==="dr-saffo"?"doctor":"adult"}/>
           <Pulse cx={p.x} cy={p.y-3} r={0.8} color={p.color}/>
           {hoveredPerson===p.id&&<g>
-            <rect x={p.x-18} y={p.y-16} width={36} height={8} rx={1} fill="rgba(26,26,26,0.93)" stroke={p.color} strokeWidth={0.25}/>
-            <text x={p.x} y={p.y-12} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
-            <text x={p.x} y={p.y-9.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
+            <rect x={p.x-35} y={p.y-18} width={70} height={12} rx={1.5} fill="rgba(26,26,26,0.95)" stroke={p.color} strokeWidth={0.25}/>
+            <text x={p.x} y={p.y-13} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
+            <text x={p.x} y={p.y-9.5} textAnchor="middle" style={{fontSize:1.4,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
           </g>}
         </g>
       ))}
@@ -633,21 +632,23 @@ function PersonStory({person}){
 /* ═══════════════════════════════════════════════════════════════════════════
    NAVBAR
    ═══════════════════════════════════════════════════════════════════════════ */
-function NavBar({level,onHome,onGoUS,onGoNYC}){
+function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital}){
   if(level<0)return null;
 
-  const usActive  = level===0;
-  const nycActive = level>=1;
+  const usActive       = level === 0;
+  const nycActive      = level === 1;
+  const hospitalActive = level >= 2;
 
   const mapBtnBase={
-    display:"flex",width:208,height:45,flexDirection:"column",
+    display:"flex",height:45,flexDirection:"column",
     justifyContent:"center",alignItems:"center",
     border:"none",cursor:"pointer",
     fontFamily:"'Libre Franklin',sans-serif",
-    fontSize:16,fontStyle:"italic",fontWeight:600,
+    fontSize:15,fontStyle:"italic",fontWeight:600,
     lineHeight:"normal",textAlign:"center",
     transition:"background 0.18s,color 0.18s",
     flexShrink:0,
+    padding:"0 20px"
   };
 
   return(
@@ -656,34 +657,31 @@ function NavBar({level,onHome,onGoUS,onGoNYC}){
       height:61,zIndex:100,
       background:"#000",
       display:"flex",alignItems:"center",
-      padding:"0 20px",gap:0,
+      padding:"0 16px",gap:0,
       borderBottom:`2px solid ${RED}`,
+      overflowX:"auto", 
+      whiteSpace:"nowrap"
     }}>
       <button onClick={onHome} style={{
         background:"none",border:"none",
         fontFamily:"'Libre Franklin',sans-serif",
         fontSize:15,fontWeight:900,color:"#f5f5f5",
-        cursor:"pointer",marginRight:20,letterSpacing:0.3,
+        cursor:"pointer",marginRight:16,letterSpacing:0.3,
         whiteSpace:"nowrap",
-      }}>Civic Health Alliance</button>
+        flexShrink:0
+      }}>Civic Health</button>
 
-      <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8}}/>
+      <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8,flexShrink:0}}/>
 
-      <button onClick={onGoUS} style={{...mapBtnBase,background:usActive?RED:"transparent",color:usActive?"#fff":"#888"}}>United States Map</button>
-      <button onClick={onGoNYC} style={{...mapBtnBase,background:nycActive?RED:"transparent",color:nycActive?"#fff":"#888"}}>New York City Map</button>
+      <button onClick={onGoUS} style={{...mapBtnBase,background:usActive?RED:"transparent",color:usActive?"#fff":"#888"}}>US Map</button>
+      <button onClick={onGoNYC} style={{...mapBtnBase,background:nycActive?RED:"transparent",color:nycActive?"#fff":"#888"}}>NYC Map</button>
+      <button onClick={onGoHospital} style={{...mapBtnBase,background:hospitalActive?RED:"transparent",color:hospitalActive?"#fff":"#888"}}>Health Center</button>
 
-      {level===2&&(
-        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:4}}>
+      {/* Keeps the Story breadcrumb distinct when viewing a patient's story */}
+      {level === 3 && (
+        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:8,flexShrink:0}}>
           <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
-          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:"#f5f5f5",fontWeight:600}}>Health Center</span>
-        </span>
-      )}
-      {level===3&&(
-        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:4}}>
-          <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
-          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:"#f5f5f5",fontWeight:600}}>Health Center</span>
-          <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
-          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:RED,fontWeight:600}}>Story</span>
+          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:14,fontStyle:"italic",color:RED,fontWeight:600}}>Story</span>
         </span>
       )}
     </div>
@@ -730,7 +728,13 @@ export default function App(){
         button:hover{opacity:0.88;}
       `}</style>
 
-      <NavBar level={level} onHome={()=>zoomTo(-1)} onGoUS={()=>level!==0&&zoomTo(0)} onGoNYC={()=>level<1&&zoomTo(1)}/>
+      <NavBar 
+        level={level} 
+        onHome={()=>zoomTo(-1)} 
+        onGoUS={()=>level!==0&&zoomTo(0)} 
+        onGoNYC={()=>level!==1&&zoomTo(1)} /* Changed from level<1 */
+        onGoHospital={()=>level!==2&&zoomTo(2)} 
+      />
 
       {/* ── TITLE PAGE ── */}
       {level===-1&&(
