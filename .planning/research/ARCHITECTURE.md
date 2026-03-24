@@ -1,347 +1,381 @@
 # Architecture Research
 
-**Domain:** Static civic health data visualization (React + Vite, SVG-based, no backend)
-**Researched:** 2026-03-10
-**Confidence:** HIGH
+**Domain:** Single-file React SPA — incremental refinements to touch navigation, SVG layout, and content data
+**Researched:** 2026-03-24
+**Confidence:** HIGH — based on direct code analysis of `src/App.jsx` (730 lines) and project constraints
 
-## Current State Assessment
+---
 
-The entire application lives in a single 567-line `src/App.jsx` file. All data is defined as JavaScript constants at the top of the file (~248 lines of data, ~240 lines of components, ~80 lines of state/layout). This monolith was appropriate for a prototype with fake data but will not survive the transition to real, citable, updateable data from multiple public sources.
+## Current System State
 
-The data currently embedded inline breaks down as:
-- `STATE_DATA` (51 entries, 3 metrics each) -- ~50 lines
-- `HEX_GRID` (51 coordinate pairs) -- 2 lines
-- `CD_PATHS` (59 SVG path definitions) -- ~65 lines
-- `NYC_DISTRICTS` (59 entries, 5 fields each) -- ~60 lines
-- `HOSPITAL_PEOPLE` (4 people with timelines) -- ~40 lines
-- `DEPARTMENTS` (4 entries) -- 5 lines
-- Color functions and constants -- ~8 lines
-
-Real data will be larger (more metrics per state, source citations, richer timelines) and must be traceable to sources. Keeping it inline in App.jsx would push the file past 1,000 lines and make data updates a minefield.
-
-## Recommended Architecture
-
-### System Overview
+Everything lives in `src/App.jsx`. The project constraint from `PROJECT.md` explicitly rules out file decomposition for this milestone. All changes described in this document are edits within that single file.
 
 ```
-src/
-├── data/                    # All data, separated by zoom level
-│   ├── states.js            # STATE_DATA + HEX_GRID + source citations
-│   ├── nycDistricts.js      # NYC_DISTRICTS + source citations
-│   ├── nycPaths.js          # CD_PATHS (SVG geometry, rarely changes)
-│   ├── hospital.js          # DEPARTMENTS + HOSPITAL_PEOPLE
-│   └── sources.json         # Master citation registry
-├── components/              # One file per zoom-level view
-│   ├── USMap.jsx            # Level 0: hex grid map
-│   ├── NYCMap.jsx           # Level 1: community district map
-│   ├── HospitalScene.jsx    # Level 2: health center departments + figures
-│   ├── PersonStory.jsx      # Level 3: individual timeline
-│   ├── InfoPanel.jsx        # Hover overlay (shared)
-│   ├── PersonFig.jsx        # SVG person figure (shared)
-│   └── Pulse.jsx            # SVG pulse animation (shared)
-├── utils/
-│   ├── colors.js            # leColor, engagementColor, sevColor, typeColor
-│   └── animations.js        # Zoom transition logic (if extracted)
-├── App.jsx                  # ~100 lines: state, layout, zoom orchestration
-└── main.jsx                 # Entry point (unchanged)
+src/App.jsx (730 lines)
+ ├── Lines 1–224     Data layer + color utilities + shared style constants
+ ├── Lines 229–237   Pulse component (SVG pulse dot)
+ ├── Lines 242–397   LeftPanel (narrative text, legends, hover cards, nav arrows)
+ ├── Lines 402–421   USMap (hex state grid)
+ ├── Lines 427–441   NYCMap (community district SVG)
+ ├── Lines 446–465   PersonFig (SVG person figure primitives)
+ ├── Lines 467–507   HospitalScene (rooms + person figures)
+ ├── Lines 512–553   PersonStory (individual timeline)
+ ├── Lines 558–633   NavBar (breadcrumb navigation)
+ └── Lines 638–730   App (state machine, layout, zoom transitions)
 ```
 
-### Component Responsibilities
+The App component is the sole owner of all state. Components receive data and callbacks as props. No context, no shared module state, no event bus.
 
-| Component | Responsibility | Typical Implementation |
-|-----------|----------------|------------------------|
-| `App.jsx` | Zoom state machine, breadcrumb nav, layout shell | useState + useCallback, conditional rendering by level |
-| `USMap` | Render hex grid, color by metric, hover states | Imports `states.js` data, receives hover callbacks as props |
-| `NYCMap` | Render community district SVG paths, color by metric | Imports `nycDistricts.js` + `nycPaths.js` |
-| `HospitalScene` | Render department rooms and person figures | Imports `hospital.js`, passes click to zoom handler |
-| `PersonStory` | Render selected person's timeline, narrative | Receives person object as prop |
-| `InfoPanel` | Floating info panel on hover | Receives data + position as props |
-| `data/*.js` | Export data constants with source metadata | Named exports, ES module format |
+---
 
-## Data Management Strategy
+## Component Boundaries
 
-### Use ES Module Files, Not JSON
+### NavBar (lines 558–633)
 
-Use `.js` files (not `.json`) for data because:
-1. **Vite tree-shakes JS imports** -- unused exports are eliminated from the build
-2. **Comments are possible** -- inline source annotations like `// CDC WONDER 2022`
-3. **Computed values** -- derived fields (e.g., gap calculations) can live next to raw data
-4. **Type coercion** -- no risk of string-vs-number bugs from JSON parsing
+**Owns:** Top navigation bar rendering. Nothing else.
 
-JSON is appropriate only for the citation registry (`sources.json`) since it is pure reference data that could be consumed by other tools.
+**Receives from App:**
+- `level` — integer (-1 to 3) controlling which breadcrumbs render
+- `onHome` — callback: `() => zoomTo(-1)`
+- `onGoUS` — callback: `() => level !== 0 && zoomTo(0)`
+- `onGoNYC` — callback: `() => level < 1 && zoomTo(1)`
 
-### Data File Structure
+**Does NOT receive:** Callbacks for levels 2 (Health Center) or 3 (Story). These breadcrumbs at lines 617–630 render as display-only `<span>` labels — no `onClick` handlers. They show context ("Health Center" and "Story") but tapping them does nothing on touch screens.
 
-Each data file follows the same pattern:
+**Current breadcrumb structure:**
+```
+Level 0:  [Civic Health Alliance]  [US Map •active]  [NYC Map]
+Level 1:  [Civic Health Alliance]  [US Map]  [NYC Map •active]
+Level 2:  [Civic Health Alliance]  [US Map]  [NYC Map •active]  › Health Center
+Level 3:  [Civic Health Alliance]  [US Map]  [NYC Map]  › Health Center  › Story
+```
+
+At levels 2 and 3 the "Health Center" and "Story" spans have no touch target. A user on a touch screen at level 3 must know to tap "NYC Map" to go back two levels — or rely on the "Back to Health Center" button inside `PersonStory`. The back arrow in `LeftPanel` (`onPrev`) is hidden at level 3 because `PersonStory` occupies a separate layout branch.
+
+**Touch navigation gap:** The back arrow in `LeftPanel` at line 384 fires `onPrev={() => zoomTo(level-1, null)}` and the next arrow fires `onNext`. These exist inside the levels 0–2 layout branch at lines 702–717. At level 3 (PersonStory), the layout switches to a completely different branch (lines 720–728) and neither arrow is present. The only explicit back path from level 3 is the "Back to Health Center" button at line 724.
+
+**Explicit back arrow requirement:** The active requirement in `PROJECT.md` calls for a back arrow button *in NavBar* for touch screen navigation. Adding it to NavBar means NavBar needs a new prop — a back callback from App — and renders a visible touch-sized button at all levels > 0. The App component wires the correct `zoomTo` target.
+
+**Tappable breadcrumbs requirement:** The level-2 and level-3 breadcrumb spans need `onClick` callbacks. At level 2 the "Health Center" span is already the active location — no navigation needed. At level 3, "Health Center" should call `zoomTo(2)` and "Story" is the active label. The US/NYC buttons already have `onClick` at all levels. The gap is only for the level 2+ breadcrumb spans.
+
+---
+
+### HospitalScene (lines 467–507)
+
+**Owns:** Rendering 4 department rooms and 4 person figures inside an SVG `viewBox="0 0 100 96"`.
+
+**Receives from App:**
+- `hoveredPerson`, `onHoverPerson` — hover state for person figures
+- `onClickPerson` — fires `zoomTo(3, id)` when a person is clicked
+- `hoveredDept`, `onHoverDept` — hover state for department rooms
+
+**Layout issue — person figure positioning:**
+
+People are positioned via `x` and `y` props passed to `PersonFig`. Those coordinates in `HOSPITAL_PEOPLE` are:
+
+| Person | x | y | Department area |
+|--------|---|---|-----------------|
+| Maria Santos | 60 | 69 | Pediatrics room (x:46–74, y:55–83) |
+| Dr. Okafor | 29 | 36 | Primary Care room (x:14–44, y:22–50) |
+| James Whitfield | 72 | 36 | Waiting Room area (x:56–88, y:22–50) |
+| Sofia Chen | 30 | 71 | Dental room (x:18–42, y:55–83) |
+
+`PersonFig` renders with `scale(0.45)` applied to a group centered at `(x, y)`. The adult figure body extends from approximately y-3 to y+12 in unscaled units, then compressed by 0.45. The center of the rendered figure is not at the geometric center of its room rectangle — figures appear to float in the upper portion of the room rather than being vertically centered.
+
+The centering fix requires calculating each room's center point from the `DEPARTMENTS` constants:
+- `cx = d.x + d.w/2`
+- `cy = d.y + d.h/2`
+
+Then placing the figure's reference point at a vertical offset from that center. The `PersonFig` component's visual center of mass is approximately at `y + 5` in unscaled space (midpoint of head-to-legs span of ~17 units, scaled by 0.45 = ~7.6 units tall, center at ~3.8 below the translate origin). Placing each person at `(cx, cy - 3)` would center them more accurately within their room.
+
+**SVG text overlap issue:**
+
+Department rooms display three stacked text elements:
+1. Department label at `d.y + 4.5` (fontSize 2.4)
+2. Wait number at `d.y + 8` (fontSize 3.5) — only when `d.wait !== null`
+3. Wait unit ("day wait") at `d.y + 10.5` (fontSize 1.5)
+4. Note at `d.y + d.h - 2.5` (fontSize 1.6)
+
+Room height is 28 SVG units. At the bottom of the room (`d.y + d.h - 2.5 = d.y + 25.5`) the note sits close to the person figure that also occupies this room. The label and wait number at the top, plus the note at the bottom, leave roughly 12 SVG units of space in the middle — where person figures are placed. The overlap between person figures and room text becomes visible when figure coordinates happen to be near text anchor positions.
+
+---
+
+### PersonStory (lines 512–553)
+
+**Owns:** Full-page rendering of a single person's timeline narrative.
+
+**Receives from App:**
+- `person` — a full object from `HOSPITAL_PEOPLE`
+
+**Content replacement scope:** The four entries in `HOSPITAL_PEOPLE` (Maria, Dr. Okafor, James, Sofia) are composite fictional characters. Replacing them with real stories from Stella Saffo's transcript means editing the data constants at lines 200–205 of `src/App.jsx`. The component itself does not need changes — it renders whatever `person.bg` and `person.timeline` contain. The structural change is purely in data.
+
+**Impact on PersonStory's summary card (lines 543–549):** The summary messages at the bottom of PersonStory are hard-coded `person.id === "maria"` conditionals. When person IDs change for new story subjects, these conditionals must be updated to match the new IDs, or the summary text must be moved into the person data object itself (a `summary` field on each person).
+
+Moving the summary text into the data object is the cleaner approach: add a `summary` field to each `HOSPITAL_PEOPLE` entry, then render `{person.summary}` in the component instead of the switch-on-id pattern. This makes the content replacement fully self-contained in the data constants.
+
+---
+
+### LeftPanel (lines 242–397)
+
+**Owns:** Chapter narrative text, legends (levels 0 and 1), hover detail cards, and Back/Next navigation arrows.
+
+**Navigation arrows:** Lines 378–395 render Back and Next buttons conditioned on `level > 0` and `level < 2` respectively. These are present only within the levels 0–2 layout branch. They do not cover level 3.
+
+**Relationship to NavBar back arrow:** `LeftPanel`'s Back arrow and NavBar's proposed back arrow would both call `zoomTo(level - 1)`. They serve different purposes: LeftPanel arrows are part of the editorial narrative flow ("go to the previous chapter"), while NavBar's back arrow is a universal escape hatch for touch users who do not see LeftPanel (e.g., at level 3 where LeftPanel is absent). Both can coexist without conflict.
+
+---
+
+### App (lines 638–730)
+
+**Owns:** All state, the `zoomTo` transition function, layout branching, and prop wiring.
+
+**Props passed down to NavBar:**
+```
+level, onHome, onGoUS, onGoNYC
+```
+
+Adding a back arrow to NavBar requires passing one more prop:
+```
+onBack={() => level > 0 && zoomTo(level - 1, null)}
+```
+
+At level -1, NavBar returns null (line 559), so `onBack` is never rendered. At level 0 (US map), going back would go to level -1 (title). The `onBack` handler should guard against navigating past level 0 to the title screen — whether that is desirable depends on UX intent. The PROJECT.md requirement says "back arrow button for touch screen navigation" without specifying a floor. The simplest safe implementation is `level > 0` as the condition.
+
+**zoomTo function (lines 647–656):**
 
 ```javascript
-// src/data/states.js
-
-/**
- * Sources:
- * - Voter turnout: MIT Election Data + Science Lab, 2020 general election
- * - Uninsured rate: US Census Bureau ACS 2022 1-year estimates (Table S2701)
- * - Life expectancy: CDC WONDER, NVSS 2020-2022
- */
-
-export const STATE_DATA = {
-  AL: {
-    name: "Alabama",
-    voterTurnout: 58.9,      // MIT Election Lab 2020
-    uninsured: 8.2,           // ACS 2022 S2701
-    lifeExp: 73.8,            // CDC WONDER 2020-2022
-  },
-  // ...
-};
-
-export const HEX_GRID = {
-  AK: [0, 0], HI: [1, 5], ME: [11, 0],
-  // ... (unchanged -- this is layout, not data)
-};
-
-export const STATE_SOURCES = {
-  voterTurnout: { name: "MIT Election Data + Science Lab", year: 2020, url: "https://electionlab.mit.edu/data" },
-  uninsured: { name: "US Census Bureau ACS", table: "S2701", year: 2022, url: "https://data.census.gov" },
-  lifeExp: { name: "CDC WONDER NVSS", years: "2020-2022", url: "https://wonder.cdc.gov" },
-};
+const zoomTo = useCallback((nl, pid) => {
+  setPhase("out");
+  setTimeout(() => {
+    setLevel(nl);
+    if (pid !== undefined) setSelectedPerson(pid ? HOSPITAL_PEOPLE.find(p => p.id === pid) : null);
+    setHovState(null); setHovHood(null); setHovPerson(null); setHovDept(null);
+    setPhase("in");
+    setTimeout(() => setPhase("idle"), 450);
+  }, 400);
+}, []);
 ```
 
-### SVG Paths Stay Separate
+This function is used unmodified for all four milestone changes. Touch navigation (NavBar back arrow, tappable breadcrumbs) calls `zoomTo` exactly as hover/click navigation already does. No changes needed to `zoomTo` itself.
 
-`CD_PATHS` is pure geometry (~65 lines of SVG path strings). It changes only if the district boundaries change (they do not). Keep it in `nycPaths.js` to avoid cluttering the data files that will be updated regularly.
+**Known fragility:** `zoomTo` has no guard for concurrent calls. Rapid tapping could trigger overlapping `setTimeout` chains. Adding a `phase !== "idle"` guard at the top of `zoomTo` prevents this without breaking existing behavior. This is a separate concern from the milestone changes but is worth noting because touch screens make rapid tapping more likely than mouse clicking.
 
-### Citation Registry
-
-```json
-// src/data/sources.json
-{
-  "cdc-wonder": {
-    "name": "CDC WONDER",
-    "url": "https://wonder.cdc.gov",
-    "accessed": "2026-03-01",
-    "datasets": ["Life expectancy by state", "Mortality by cause"]
-  },
-  "acs-2022": {
-    "name": "American Community Survey 2022",
-    "url": "https://data.census.gov",
-    "accessed": "2026-03-01",
-    "datasets": ["Uninsured rate (S2701)", "Poverty rate"]
-  }
-}
-```
-
-This registry serves two purposes: (1) a footer or "Sources" section in the UI can render it, and (2) future data updates can be traced to when each source was last pulled.
-
-## Architectural Patterns
-
-### Pattern 1: Data-as-Module (Not Fetched)
-
-**What:** All data is imported at build time via ES module `import` statements. No `fetch()`, no loading states, no error handling for network failures.
-**When to use:** Always for this project. The constraint is "fully static, no backend."
-**Trade-offs:** Bundle size increases with data, but this project's data is small (estimated <50KB total for all real data). Vite code-splits by route if needed, but with only 4 zoom levels and no routing, eager loading is fine.
-
-```javascript
-// In USMap.jsx
-import { STATE_DATA, HEX_GRID } from '../data/states';
-```
-
-This is the simplest possible data architecture. It compiles to static JS in the Vite build, works with any static host, needs zero runtime data fetching.
-
-### Pattern 2: Source Metadata Colocation
-
-**What:** Keep source citations directly next to the data they describe, not in a separate file.
-**When to use:** For every data constant. The project's credibility depends on citing real sources.
-**Trade-offs:** Slightly larger source files, but dramatically easier to verify and update data.
-
-The `STATE_SOURCES` export alongside `STATE_DATA` means a developer updating voter turnout data can immediately see which source to pull from, and can update the year/URL at the same time.
-
-### Pattern 3: Props-Down for View Components
-
-**What:** View components receive data as props, do not import data directly. Exception: top-level map components (USMap, NYCMap) import their own data because they are the sole consumers.
-**When to use:** For shared components (InfoPanel, PersonFig, Pulse) and for PersonStory (which receives a specific person object).
-**Trade-offs:** Slightly more prop threading, but components stay reusable and testable.
-
-```javascript
-// App.jsx -- PersonStory gets a specific person, not the whole array
-{level === 3 && selectedPerson && (
-  <PersonStory person={selectedPerson} onBack={() => zoomTo(2)} />
-)}
-```
+---
 
 ## Data Flow
 
-### Current Flow (Unchanged Conceptually)
+### Zoom Navigation (all 4 milestone changes use this path)
 
 ```
-[User Click/Hover]
-    |
-[App.jsx state machine]
-    |
-    +-- level 0 --> USMap (reads states.js)
-    +-- level 1 --> NYCMap (reads nycDistricts.js + nycPaths.js)
-    +-- level 2 --> HospitalScene (reads hospital.js)
-    +-- level 3 --> PersonStory (receives person via prop)
-    |
-[Hover] --> InfoPanel (receives data via prop from parent)
+Touch event on NavBar button / breadcrumb / LeftPanel arrow
+  |
+  v
+onClick callback (prop from App)
+  |
+  v
+zoomTo(newLevel, personId?) in App
+  |
+  +-- setPhase("out")       [400ms fade out]
+  |
+  +-- setTimeout 400ms:
+      setLevel(newLevel)
+      setSelectedPerson(...)
+      reset all hover states
+      setPhase("in")        [450ms fade in]
+      setTimeout 450ms: setPhase("idle")
+  |
+  v
+App re-renders with new level
+NavBar re-renders with new level (active states, breadcrumbs)
+Correct view branch renders (title / map layout / person story)
 ```
 
-### State Management
+### Hover Flow (SVG layout changes affect this path)
 
-No state management library needed. The app has exactly 7 pieces of state (level, phase, hovState, hovHood, hovPerson, hovDept, selectedPerson). React useState is sufficient. Adding Context, Redux, or Zustand would be over-engineering for a visualization with no user input, no forms, no authentication.
+```
+onMouseEnter on SVG <g> element
+  |
+  v
+onHoverPerson(id) or onHoverDept(id) prop
+  |
+  v
+setHovPerson(id) or setHovDept(id) in App
+  |
+  v
+HospitalScene re-renders:
+  - tooltip <rect>/<text> appears near person at (p.x - 16, p.y - 15)
+  - department room highlight (stroke/fill change)
+```
 
-### Key Data Flows
+When person `x`/`y` coordinates change for the centering fix, the tooltip position `(p.x - 16, p.y - 15)` also moves with them. No separate tooltip positioning logic is needed — it is relative to the figure's coordinates.
 
-1. **Zoom navigation:** User click -> `zoomTo()` in App.jsx -> animation phase state -> level change -> conditional render of zoom-level component
-2. **Hover info:** Mouse enter on SVG element -> set hover state in App.jsx -> pass hovered item data to InfoPanel
-3. **Person selection:** Click person figure in HospitalScene -> `zoomTo(3, personId)` -> App looks up person from hospital.js -> passes to PersonStory
+### Content Replacement Flow (data-only change)
 
-## Component Splitting Strategy
+```
+HOSPITAL_PEOPLE constant (lines 200–205)
+  |
+  v
+App reads HOSPITAL_PEOPLE in zoomTo to find selectedPerson
+  |
+  v
+PersonStory receives person as prop
+  |
+  v
+PersonStory renders person.name, person.bg, person.timeline[]
+PersonStory renders person.summary (after field is added)
+```
 
-### Why Split Now
+The only components that read `HOSPITAL_PEOPLE` directly are:
+1. `HospitalScene` — iterates `.map()` to render person figures
+2. `App` — uses `.find()` inside `zoomTo` to resolve `selectedPerson`
 
-The monolithic App.jsx must be split **before** replacing data, not after. Reasons:
-1. **Merge conflicts:** Multiple researchers updating data in the same file will collide constantly
-2. **Cognitive load:** 600+ lines means scrolling past SVG paths to find component logic
-3. **Incremental updates:** One zoom level's data can be updated and tested independently
+`PersonStory` receives the resolved person object as a prop and does not import the array. Replacing content in `HOSPITAL_PEOPLE` is fully self-contained in the data constants. The `PersonFig` component uses only `x`, `y`, `color`, and `variant` — it does not read name, bg, or timeline. No layout component needs changes for content replacement.
 
-### Split Order (Build Implications)
+---
 
-Split the file in this order to minimize risk at each step:
+## Suggested Build Order
 
-1. **Extract `src/utils/colors.js`** -- pure functions, zero risk. Import in App.jsx.
-2. **Extract `src/data/nycPaths.js`** -- pure SVG data, no logic. Import in App.jsx.
-3. **Extract `src/data/states.js`** -- STATE_DATA + HEX_GRID. Import in App.jsx.
-4. **Extract `src/data/nycDistricts.js`** -- NYC_DISTRICTS. Import in App.jsx.
-5. **Extract `src/data/hospital.js`** -- HOSPITAL_PEOPLE + DEPARTMENTS. Import in App.jsx.
-6. **Extract `src/components/Pulse.jsx`** -- tiny leaf component, no dependencies.
-7. **Extract `src/components/PersonFig.jsx`** -- tiny leaf component.
-8. **Extract `src/components/InfoPanel.jsx`** -- receives all data via props.
-9. **Extract `src/components/USMap.jsx`** -- imports its own data.
-10. **Extract `src/components/NYCMap.jsx`** -- imports its own data.
-11. **Extract `src/components/HospitalScene.jsx`** -- imports hospital.js.
-12. **Extract `src/components/PersonStory.jsx`** -- receives person via props.
+The four changes in this milestone have dependency relationships:
 
-After step 12, `App.jsx` should be ~80-120 lines: imports, state declarations, zoomTo logic, breadcrumb nav, and conditional rendering of the four zoom-level components.
+### 1. Add `summary` field to `HOSPITAL_PEOPLE` data objects
 
-**Each step should be a separate commit that changes nothing visually.** The app should look identical after every extraction.
+**Why first:** This is a pure data addition with no component side effects. It can be done while reading the transcript. It also unlocks removing the hard-coded `person.id === "maria"` conditionals before the actual story content is ready, reducing the coupling between data and component code.
 
-### Data Replacement Comes After Split
+**What it touches:** `HOSPITAL_PEOPLE` constant only.
 
-Once the file structure is established:
-- Replace `src/data/states.js` with real CDC/Census/MIT Election Lab data
-- Replace `src/data/nycDistricts.js` with real NYC DOH/Board of Elections data
-- Replace `src/data/hospital.js` with real composite stories built from documented cases
-- Each replacement is an isolated change to one file
+### 2. Update `PersonStory` to use `person.summary`
 
-## Future Data Updates
+**Why second:** Remove the `person.id` switch-on-id pattern in the summary card (lines 543–549) and replace with `{person.summary}`. This decouples the component from specific person IDs before the IDs change. After this change, any data content swap in step 4 will render correctly without component edits.
 
-### Update Process
+**What it touches:** `PersonStory` component only (6 lines removed, 1 line added).
 
-When new data is published (e.g., ACS 2023 releases in late 2024):
+### 3. Fix `NavBar` touch navigation
 
-1. Update the relevant `src/data/*.js` file with new values
-2. Update the source metadata (year, URL, accessed date)
-3. Run `npm run build` -- Vite bundles the new data
-4. Deploy the static build
+**Why third:** NavBar changes require adding a new prop in App and modifying NavBar. This is low risk and has no visual dependency on the SVG layout or content changes. It should be done and visually verified independently.
 
-No database migrations. No API changes. No backend deployment. Just edit a JS file and rebuild.
+**Specific changes:**
+- Add `onBack` prop to `NavBar` function signature
+- Render a back arrow button (`← ` or `‹`) conditionally when `level > 0`
+- Add `onClick` to the "Health Center" breadcrumb span at level 3, wiring `zoomTo(2)`
+- Wire `onBack={() => level > 0 && zoomTo(level - 1, null)}` in App's NavBar render
 
-### Adding New Metrics
+**Touch target size:** The back arrow button needs a minimum 44x44 CSS pixel touch target (standard iOS/Android guideline). At the current NavBar height of 61px, the height is sufficient. Ensure the button has `minWidth: 44` or generous padding to meet the width requirement. The existing `mapBtnBase` style object sets `width: 208` — the back arrow should be a smaller independent button, not based on `mapBtnBase`.
 
-To add a new metric (e.g., Medicaid enrollment rate per state):
+**What it touches:** `NavBar` component and one line in `App`'s JSX (NavBar props).
 
-1. Add the field to each entry in `STATE_DATA`
-2. Add a color mapping function to `src/utils/colors.js`
-3. Add source metadata to `STATE_SOURCES`
-4. Update `USMap.jsx` to use the new metric (or add a toggle)
+### 4. Center person figures and fix text overlap in `HospitalScene`
 
-The modular structure means step 1 and step 4 are in different files, reviewed by different people if needed.
+**Why fourth:** SVG coordinate changes require visual verification to confirm figures sit inside rooms. This is best done after the non-visual changes are committed, so any visual diff is clearly attributable to this step.
 
-### Adding New Stories
+**Specific changes:**
+- Update `x` and `y` in each `HOSPITAL_PEOPLE` entry to center figures within their department room
+- Room centers (from `DEPARTMENTS` constants):
+  - Primary Care: cx=29, cy=36 (matches current Dr. Okafor position — already centered)
+  - Waiting Room: cx=72, cy=36 (matches current James position — already centered)
+  - Pediatrics: cx=60, cy=69 (matches current Maria position — already centered)
+  - Dental: cx=30, cy=69 (current Sofia is at x:30, y:71 — close but slightly off)
+- The apparent issue is likely text overlap rather than figure position: the label at `d.y+4.5`, wait value at `d.y+8`, and note at `d.y+d.h-2.5` occupy the top and bottom of each room, with figures in the middle. If rooms are 28 units tall and figures are ~7.6 units tall (scaled), figures placed at `cy` of the room are actually competing with the bottom note text.
+- Resolution: Move each person's `y` coordinate up by approximately 3–5 SVG units from the room center, placing them in the vertical middle of the empty space between the wait value text and the bottom note text.
+- Text overlap fix: Verify by inspection whether `d.y + 10.5` (wait unit text) and figure positions overlap. If they do, increase vertical spacing between the wait number and wait unit, or move figure origin down within `PersonFig`'s internal coordinate system.
 
-The `HOSPITAL_PEOPLE` array in `hospital.js` is designed to grow. Each person is a self-contained object with `id`, `name`, `role`, `timeline[]`. Adding a 5th person:
+**What it touches:** `HOSPITAL_PEOPLE` x/y coordinates (data constants, not component logic).
 
-1. Add the object to the array in `hospital.js`
-2. Position them in the hospital scene (adjust `x`, `y` coordinates)
-3. No changes to PersonStory.jsx needed -- it renders any person object with the standard shape
+### 5. Replace story content in `HOSPITAL_PEOPLE`
 
-## Anti-Patterns
+**Why last:** Requires reading the Stella Saffo transcript and drafting new timeline entries. This is the highest-effort change and has no dependencies on steps 3 or 4. It can proceed in parallel with steps 3 and 4, but is listed last because the data layer work (steps 1 and 2) must be complete before this is done to avoid re-editing PersonStory.
 
-### Anti-Pattern 1: Fetching Data at Runtime
+**What it touches:** `HOSPITAL_PEOPLE` constant — `id`, `name`, `role`, `age`, `bg`, `summary`, `timeline[]`, `color`. Possibly `variant` if the new characters require child or doctor figure variants.
 
-**What people do:** Move data to JSON files in `public/` and `fetch()` them at runtime
-**Why it's wrong:** Introduces loading states, error handling, CORS issues, and caching concerns -- all for data that is known at build time. The project requirement is "fully static."
-**Do this instead:** Import data as ES modules. Vite bundles them into the JS output. Zero runtime overhead.
+**Side effect on NavBar breadcrumbs:** None — NavBar does not reference person names or IDs.
 
-### Anti-Pattern 2: Single Data File
+**Side effect on HospitalScene:** None — HospitalScene renders `PersonFig` using only `x`, `y`, `color`, and `variant` from person objects. As long as those fields remain, figure rendering is unchanged.
 
-**What people do:** Create one `data.js` file with everything (states, districts, paths, people)
-**Why it's wrong:** Same problem as the current monolith. Different data comes from different sources, updates at different times, and is consumed by different components.
-**Do this instead:** One file per data domain (states, districts, paths, hospital). Keep the mapping between "where does this data come from" and "which file do I edit" obvious.
+**Side effect on PersonStory:** None after step 2 decouples the component from person IDs.
 
-### Anti-Pattern 3: Over-Engineering State Management
+---
 
-**What people do:** Add Redux/Zustand/Context for 7 pieces of UI state in a read-only visualization
-**Why it's wrong:** The app has no forms, no user-generated data, no server state to sync. Adding a state library increases bundle size and cognitive overhead for zero benefit.
-**Do this instead:** Keep useState in App.jsx. If prop drilling becomes painful (it won't with 4 zoom levels), add a single React Context for zoom state.
+## Component Responsibility Table
 
-### Anti-Pattern 4: Premature Component Library
+| Component | Responsibility | Communicates With | Change Type for Milestone |
+|-----------|---------------|-------------------|--------------------------|
+| `App` | State owner, layout, zoom transitions | Passes props to all components | Add `onBack` prop to NavBar wire |
+| `NavBar` | Top nav, breadcrumbs | Receives callbacks from App | Add back arrow + clickable breadcrumbs |
+| `LeftPanel` | Chapter narrative, hover info, nav arrows | Reads hover state via props | No change |
+| `USMap` | US hex state map | Reports hover via prop | No change |
+| `NYCMap` | NYC district map | Reports hover via prop | No change |
+| `HospitalScene` | Hospital rooms + person figures | Reports hover/click via prop | Person x/y coordinate update only |
+| `PersonFig` | SVG person figure primitive | Receives x, y, color, variant | No change |
+| `PersonStory` | Individual timeline narrative | Receives person object via prop | Remove id-switch, use person.summary |
+| `HOSPITAL_PEOPLE` | Person story data | Read by App, HospitalScene | Full content replacement |
 
-**What people do:** Extract every SVG element into its own component (HexCell, DistrictPath, TimelineEvent, etc.)
-**Why it's wrong:** These are not reusable across projects. Over-componentization makes data flow harder to trace in an SVG-heavy app where coordinates and transforms are tightly coupled.
-**Do this instead:** Split by zoom level (USMap, NYCMap, HospitalScene, PersonStory). Within each component, inline SVG rendering is fine. Only extract truly shared primitives (Pulse, PersonFig).
+---
 
-### Anti-Pattern 5: TypeScript Conversion During Data Migration
+## Integration Boundaries
 
-**What people do:** Convert to TypeScript at the same time as replacing data and splitting files
-**Why it's wrong:** Three risky changes at once. Each is individually safe; combined they create a merge nightmare.
-**Do this instead:** Complete the split and data replacement in JavaScript first. TypeScript conversion (if desired) is a separate future phase.
+### What changes are isolated within one component
 
-## Scaling Considerations
+- **NavBar back arrow:** Contained to `NavBar` (new button element) + one line in App (new prop). Zero effect on HospitalScene, LeftPanel, or PersonStory.
+- **Tappable breadcrumbs:** Contained to `NavBar` (add onClick to span elements) + zero App changes (reuse existing `onGoNYC`/new `onGoHealthCenter` prop if needed, or inline `zoomTo(2)` call via new prop).
+- **Person figure centering:** Contained to `HOSPITAL_PEOPLE` x/y values. Does not affect PersonStory, NavBar, or LeftPanel.
+- **SVG text overlap fix:** Contained to text y-coordinate values inside `HospitalScene` render loop. No data changes.
+- **Content replacement:** Contained to `HOSPITAL_PEOPLE` constant + minor PersonStory component edit (step 2 above).
 
-| Scale | Architecture Adjustments |
-|-------|--------------------------|
-| Current (4 zoom levels, ~60 districts, 51 states) | No changes needed. Everything fits in a single bundle under 200KB. |
-| Adding 5-10 more metrics per state | Still fine as inline data. Estimated <100KB of data total. |
-| Adding all US counties (~3,200) | Would need code-splitting: lazy-load county data only when a state is clicked. Use `React.lazy()` + dynamic `import()`. |
-| Interactive filtering/comparison tools | Would need state management upgrade (Context or Zustand) for filter state. Still no backend. |
+### What shares a change surface
 
-### First Bottleneck
+- `HOSPITAL_PEOPLE` is read by both `HospitalScene` (for x/y/color/variant/id) and `App.zoomTo` (for name lookup by id). Changing person IDs requires updating any switch-on-id logic in `PersonStory` — hence step 2 above eliminates that coupling first.
+- `NavBar`'s breadcrumb active states are driven by `level`. Adding tappable breadcrumbs for levels 2 and 3 requires `NavBar` to receive callbacks for those levels — currently `onGoNYC` covers level 1 but there is no `onGoHealthCenter` prop. App must provide it.
 
-**SVG rendering performance** -- not data size. If the NYC map adds more interactive elements (hover effects on 59 districts with animations), the SVG DOM gets heavy. Mitigation: debounce hover handlers, use CSS transitions instead of React re-renders for hover effects.
+### No circular dependencies
 
-### Second Bottleneck
+The data flows entirely from App (owner) downward to components (consumers). No component calls another component directly. No shared mutable state outside of App's useState variables.
 
-**Bundle size** if substantially more data is added. Mitigation: Vite's built-in code splitting via dynamic imports. Not needed now, but the modular file structure makes it trivial to add later.
+---
 
-## Build Order Implications for Roadmap
+## Anti-Patterns to Avoid for This Milestone
 
-The architecture recommends this phase ordering:
+### Introducing imperative DOM mutation for touch targets
 
-**Phase 1: File structure split (no data changes)**
-- Extract data files and components from monolithic App.jsx
-- Every commit preserves visual parity -- app looks identical
-- This is low-risk, high-value scaffolding
+**What people do:** Add `onTouchStart`/`onTouchEnd` handlers that manually call `style.background = ...` (like the existing BEGIN button hover at lines 694–695) to simulate touch feedback.
 
-**Phase 2: Replace data per zoom level (independent tracks)**
-- US state data (CDC, Census, MIT Election Lab)
-- NYC district data (NYC DOH, Board of Elections)
-- Hospital/person stories (composite from documented cases)
-- These can proceed in parallel once the file structure is in place
+**Why it's wrong:** Imperative style mutation bypasses React's reconciliation and can leave elements in wrong visual states after re-renders. The existing BEGIN button pattern is already fragile (noted in `CONCERNS.md`). For NavBar, touch feedback should use CSS `active` pseudo-class via a `<style>` tag or the existing `button:hover` rule in the inline styles block.
 
-**Phase 3: Source citations and UI polish**
-- Add source footer/overlay to the UI
-- Adjust color scales if real data distributions differ from fake data
-- Update any visualizations that need to accommodate new data shapes
+**Do this instead:** Let `button:hover` cover pointer devices. For touch feedback, add `button:active { opacity: 0.7; }` to the inline `<style>` tag at line 666. React's synthetic event system translates touch events to click events for `onClick` handlers — no `onTouchStart` needed for navigation.
 
-**Why this order:** The split must come first because replacing data in a monolithic file is error-prone and untestable. Once files are separated, each data domain can be researched and updated independently without merge conflicts.
+### Adding new state variables for back navigation
+
+**What people do:** Add `const [canGoBack, setCanGoBack] = useState(false)` to track navigation availability.
+
+**Why it's wrong:** This is derivable from `level` — `canGoBack = level > 0`. Adding redundant state creates synchronization risk.
+
+**Do this instead:** Derive navigation availability inline: `{level > 0 && <button onClick={onBack}>...</button>}`.
+
+### Editing `PersonFig` to fix centering
+
+**What people do:** Change the internal coordinate offsets inside the `PersonFig` component to shift where the figure "looks" centered.
+
+**Why it's wrong:** `PersonFig` is a shared primitive used by HospitalScene for all 4 figures. Changing its internal geometry affects all instances simultaneously and may break the figure proportions. The fix belongs in the data coordinates, not the component.
+
+**Do this instead:** Adjust `x`/`y` values in `HOSPITAL_PEOPLE`. The `PersonFig` component should remain a pure rendering primitive.
+
+### Changing story IDs without first decoupling PersonStory
+
+**What people do:** Replace `HOSPITAL_PEOPLE` entries with new IDs, then discover the `{person.id === "maria" && ...}` conditionals in PersonStory break.
+
+**Why it's wrong:** The component has hard-coded dependencies on specific person IDs. This creates silent rendering failures (empty summary card) rather than crashes.
+
+**Do this instead:** Add a `summary` field to the data objects and update PersonStory to use it (steps 1 and 2) before replacing story content.
+
+---
 
 ## Sources
 
-- Vite documentation on static asset handling and code splitting (vite.dev)
-- React documentation on component composition and state management (react.dev)
-- Direct analysis of existing `src/App.jsx` (567 lines, commit 8a30d88)
+- Direct analysis of `src/App.jsx` (730 lines, 2026-03-24)
+- `.planning/codebase/ARCHITECTURE.md` — existing component hierarchy and state flow documentation
+- `.planning/codebase/CONCERNS.md` — touch interaction gaps, fragile areas, known bugs
+- `.planning/codebase/CONVENTIONS.md` — inline style patterns, naming conventions, animation patterns
+- `.planning/PROJECT.md` — active requirements and constraints
 
 ---
-*Architecture research for: Civic Health Alliance data evolution*
-*Researched: 2026-03-10*
+
+*Architecture research for: Civic Health Alliance — touch navigation, SVG layout, and content integration patterns*
+*Researched: 2026-03-24*

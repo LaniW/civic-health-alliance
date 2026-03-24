@@ -1,7 +1,7 @@
 # Pitfalls Research
 
 **Domain:** Civic health data visualization with individual stories of marginalized communities
-**Researched:** 2026-03-10
+**Researched:** 2026-03-10, updated 2026-03-24
 **Confidence:** HIGH (grounded in Urban Institute Do No Harm guide, CDC data equity principles, published health equity research, and ecological fallacy literature)
 
 ## Critical Pitfalls
@@ -272,6 +272,168 @@ Story research phase, early -- before the other three stories are finalized, so 
 
 ---
 
+## Implementation Pitfalls (Milestone-Specific)
+
+The following pitfalls are specific to the four implementation tasks in the current milestone: SVG layout fixes, transcript-to-story replacement, public health stat verification, and touch navigation. They are technical rather than editorial.
+
+---
+
+### Pitfall 12: SVG Coordinate Arithmetic That Breaks When Department Size Changes
+
+**What goes wrong:**
+The hospital scene (Level 2) places text labels, wait-time numbers, and "note" strings at hardcoded offsets from department rectangle origins (`d.y+4.5`, `d.y+8`, `d.y+10.5`, `d.y+d.h-2.5`). Person figures are placed at absolute coordinates (`x:60,y:69`). When department rectangles or person positions are adjusted to fix centering or overlap, the text lines and figure coordinates do not automatically follow -- they must be manually recalculated. One off-by-one in a y-offset cascades into new overlaps.
+
+**Why it happens:**
+The SVG uses a small viewBox (`0 0 100 96`) where every coordinate is in SVG user units, not pixels. Developers reason about layout in pixel terms ("move this down by 4px") but the viewBox scale means a 1-unit move is not 1 pixel. The arithmetic is invisible -- no layout engine enforces constraints.
+
+**How to avoid:**
+- Before touching any coordinate, record the full set of existing coordinates for the affected department/figure as a comment or scratch document. Treat layout adjustment as a batch operation, not individual tweaks.
+- Calculate person centering from department bounds, not by trial-and-error pixel nudging: `personX = d.x + d.w/2`, `personY = d.y + d.h * 0.65` (two-thirds down the room). This makes the logic reproducible.
+- Text stacking order within a department: establish a fixed vertical rhythm (label at `+4.5`, number at `+8`, subtext at `+11`) and verify it fits within the room height (`d.h`) before committing. If `d.h` is 28 units and text needs 13 units of vertical space, there are 15 units of margin -- document this.
+- After any coordinate change, visually verify at the actual rendered viewport size, not just in code. The `viewBox="0 0 100 96"` makes things look fine in code but stretched or compressed at the real aspect ratio.
+
+**Warning signs:**
+- Any commit that changes `d.x`, `d.y`, `d.w`, or `d.h` without also updating associated text y-offsets.
+- Person figure y-coordinates that are absolute values rather than computed from department bounds.
+- "Looks fine on my screen" without testing at 1280x800, 1440x900, and 768x1024 viewport sizes.
+
+**Phase to address:**
+Hospital scene layout fix. Establish coordinate conventions before making any changes.
+
+---
+
+### Pitfall 13: SVG Text That Does Not Wrap and Silently Overflows
+
+**What goes wrong:**
+SVG `<text>` elements do not wrap. A department label like "Primary Care" fits. A longer label from a transcript-based story event does not -- it renders past the right edge of its container rect with no visible error. In the small-viewBox coordinate system, even a label that is 2 characters too long can overflow a 30-unit-wide room without any clipping because SVG overflow defaults to visible.
+
+The current "note" text fields (e.g., `"1 PCP per 850 patients"`) are close to their container widths. Story-derived content may be longer.
+
+**Why it happens:**
+Developers copy-paste text into SVG text elements and check the output on one screen size. The overflow is invisible unless you specifically look for it. React does not warn about SVG text overflow.
+
+**How to avoid:**
+- Enforce a character budget for every SVG text field before integrating new content. Count the characters in the widest department (32 units wide). At `fontSize: 2.4` (SVG units), roughly 16-18 characters fit per line safely.
+- For any text derived from transcript content, truncate to the budget and test at the minimum viewport width.
+- If longer labels are unavoidable, use two `<text>` elements with line-break offsets rather than one long line.
+- Add a `clipPath` on rooms that contain variable text if the content source is uncertain.
+
+**Warning signs:**
+- Any new text string longer than the longest existing string in the same position.
+- Text content sourced directly from a transcript without a character-count check.
+- Department "note" fields longer than 22 characters.
+
+**Phase to address:**
+Hospital scene layout fix and transcript integration, simultaneously.
+
+---
+
+### Pitfall 14: Transcript Content That Implies Identifiability Despite Being Real
+
+**What goes wrong:**
+The real patient stories come from Stella Saffo's clinical interview transcript describing three patient experiences: Medicaid/insurance gaps, HIV care continuity, and NY state benefits. Even when displayed as a clinical case summary (not a named individual), specific combinations of details -- HIV-positive, navigating NY state benefits, specific year of care disruption -- can narrow identification to a small population within the health center. A person who knows the clinic's patient population might recognize themselves or someone they know.
+
+This is different from Pitfall 8 (composite identification risk). Here the content is *real*, not composite. The risk is not legal but ethical: a real person described in a public kiosk/presentation without having consented to that specific public display context.
+
+**Why it happens:**
+The transcript owner (the clinician) may have consent to use clinical material for educational purposes, but "educational use in a presentation" and "public-facing interactive kiosk" are different consent contexts. Teams assume clinical interview consent covers public display.
+
+**How to avoid:**
+- Confirm explicitly with Stella Saffo what consent context the transcript was collected under. "Educational use" does not automatically include public interactive display.
+- Anonymize more aggressively than feels necessary: remove specific years, change the type of benefit navigated if a more generic equivalent serves the narrative, composite-blend the HIV care continuity story with at least one other documented case to reduce singularity.
+- Include a disclosure statement on each story: "This narrative is drawn from clinical documentation and has been anonymized to protect patient confidentiality."
+- If consent scope is unclear, treat the transcript as a *research source* for documented patterns rather than as *content* to be directly displayed.
+
+**Warning signs:**
+- Story content directly quoting or paraphrasing the transcript without editorial transformation.
+- Details that are specific enough to identify a single individual within a small patient population (e.g., the only HIV-positive patient at this clinic who navigated NY state benefits in a specific year).
+- No disclosure statement on the story panel.
+
+**Phase to address:**
+Transcript integration phase, before writing any display content.
+
+---
+
+### Pitfall 15: Stat Verification That Stops at the Number Without Checking the Definition
+
+**What goes wrong:**
+The current `STATE_DATA` contains an uninsured rate for each state (e.g., Texas at 16.8%, Massachusetts at 2.8%). KFF publishes uninsured rates for multiple denominator populations: total population, non-elderly adults (19-64), children under 19, and adults 18-64. CDC NVSR 2022 state life expectancy tables use a specific methodology (period life tables from final mortality data + July 1 Census estimates + Medicare data for ages 66-99). MAP voter turnout data uses the voting-eligible population (VEP), not the voting-age population (VAP) -- a meaningful difference in states with large non-citizen adult populations.
+
+If the verification process confirms "the number matches the source" without also confirming "the definition matches what the visualization implies," the data is technically accurate but substantively misleading.
+
+**Why it happens:**
+Verification is done by looking up a number and comparing it to what is displayed. The methodology notes and footnotes on source pages are skipped. "Uninsured rate" feels self-explanatory.
+
+**How to avoid:**
+- For each metric, document not just the number and source, but the denominator definition: "KFF state uninsured rate = non-elderly population (under 65), ACS 2023 single-year estimates." If the current data uses a different denominator, it must be updated to match or the label must specify.
+- CDC NVSR life expectancy: the 2022 state tables are in NVSR Volume 74, Number 12. Confirm that the existing state values match this specific table, not the provisional 2022 estimates (VSRR-031), which used different methodology and produced slightly different numbers.
+- MAP voter turnout: confirm whether figures are VEP-based or VAP-based, and which election cycle (2020, 2022, or 2024). The roadmap requires 2024 data; the existing data appears to be from a prior cycle.
+- Cross-check at least 5 states across the full range (highest, lowest, and 3 mid-range values) before declaring a dataset verified.
+
+**Warning signs:**
+- Verification notes that record only "confirmed: [number] matches KFF" without recording the specific table, year, and denominator.
+- Life expectancy values that do not match CDC NVSR 74-12 exactly (suggesting provisional data was used).
+- Voter turnout figures that differ from MAP's 2024 general election VEP turnout by more than 2 percentage points.
+
+**Phase to address:**
+Data verification phase, before any story content references specific statistics.
+
+---
+
+### Pitfall 16: Hover State Stuck on Touch -- The Silent Navigation Failure
+
+**What goes wrong:**
+The app uses `onMouseEnter`/`onMouseLeave` handlers throughout: on SVG state hexagons, NYC district paths, hospital department rects, and person figures. On touch screens, these events do not fire reliably. The first tap on a state hexagon fires `onMouseEnter` (triggering a hover tooltip). There is no subsequent `onMouseLeave` because the user lifts their finger and the touch event sequence ends without a mouse-leave event. The hover state stays set. The tooltip or highlight persists on the element until something else fires a state update.
+
+This means: on the primary use case device (touch kiosk), hovering is broken. Tooltip panels show stale state. Highlighted elements do not de-highlight.
+
+**Why it happens:**
+Mouse event handlers are the standard React pattern for hover interactions. Touch event handlers are added as a separate concern, often never added. The app was likely developed and tested on a desktop browser.
+
+**How to avoid:**
+- Add `onTouchStart` handlers that replicate the `onMouseEnter` behavior, and `onTouchEnd` + `onTouchCancel` handlers that replicate `onMouseLeave`. This is the minimum fix.
+- For interactive elements (district clicks, person clicks), ensure the `onClick` handler fires on touch via the native touch-to-click conversion that browsers do automatically -- do not replace this with `onTouchStart` as that fires before `onClick`.
+- After adding touch handlers, explicitly clear hover state (`setHovState(null)`, `setHovHood(null)`, etc.) on `onTouchEnd` to prevent sticky tooltips.
+- The back-arrow and breadcrumb navigation buttons (the primary new feature) must have touch targets of at least 44x44 CSS pixels. The existing NavBar buttons are `height:45px` and `width:208px` -- these are fine. Back arrow buttons in the InfoPanel are smaller (`padding:"10px 20px"`) -- verify rendered pixel size.
+
+**Warning signs:**
+- Testing touch navigation on an actual touch device, not just Chrome DevTools device emulation (DevTools emulation fires mouse events differently than real touch hardware).
+- Hover tooltips visible after the finger is lifted.
+- A back-arrow button that requires two taps to activate (first tap fires hover, second tap fires click).
+
+**Phase to address:**
+Touch navigation phase. Must test on a real touch device, not a simulator.
+
+---
+
+### Pitfall 17: Breadcrumb Navigation That Allows Impossible State Transitions
+
+**What goes wrong:**
+The roadmap requires tappable breadcrumbs to navigate to any previous level. The existing `zoomTo()` function takes a `nextLevel` integer and handles the animation. But breadcrumbs for levels 2 and 3 (Health Center, Story) present a subtlety: Level 2 (hospital scene) requires knowing which NYC district was selected; Level 3 requires knowing which person was selected. If a user taps the "New York City Map" breadcrumb from Level 3, they should land on Level 1 with whatever NYC district context was active -- but `selectedPerson` and `hovHood` are cleared in `zoomTo()`.
+
+The deeper problem: if a user navigates directly from Level 3 to Level 0 (US Map breadcrumb), they skip the intermediate levels. The `zoomTo(0)` call will work, but on return, the story context is lost. A back tap from Level 0 goes to Level -1 (Title), not back to the story.
+
+This is not a blocking problem for the current milestone (which only adds a back arrow and tappable breadcrumbs), but designing the breadcrumb interaction without thinking through the state transitions will produce a confusing navigation experience.
+
+**Why it happens:**
+Navigation logic is designed for linear forward progression (the "Next" button pattern). Non-linear navigation (jump from level 3 to level 1, then press next to get to level 2 again) is not considered.
+
+**How to avoid:**
+- Breadcrumbs should navigate backward only, never forward. A user at Level 3 can tap breadcrumbs to reach Level 2, 1, or 0. They cannot use breadcrumbs to reach Level 3 from Level 0.
+- Implement breadcrumb navigation as `zoomTo(targetLevel)` where `targetLevel` is always less than or equal to `level`. Do not allow upward jumps via breadcrumbs.
+- The back arrow should always navigate exactly one level back: `zoomTo(level - 1)`. This is simpler and safer than multi-level jumps.
+- For the current milestone, this is sufficient. Do not implement "jump to any level" breadcrumbs without first resolving what happens to `selectedPerson` state when you skip levels.
+
+**Warning signs:**
+- A breadcrumb implementation that calls `zoomTo` with a level *higher* than current level.
+- Using breadcrumbs to navigate into Level 2 or 3 without setting `selectedPerson`.
+- Pressing "next" after a breadcrumb jump producing a blank screen because required state was cleared.
+
+**Phase to address:**
+Touch navigation phase. Keep the implementation simple: back one level only.
+
+---
+
 ## Technical Debt Patterns
 
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
@@ -280,6 +442,25 @@ Story research phase, early -- before the other three stories are finalized, so 
 | Skipping the source registry | Ship visualization faster | Cannot defend claims when challenged; nightmare to update stale data | Never -- source registry is a project requirement, not a nice-to-have |
 | Building stories without community review | Avoids coordination overhead | Risk of harmful framing that damages credibility and harms communities | Only for initial drafts; must seek review before publication |
 | Using neighborhood-level data as proxy for individual demographics | Avoids complex data joins | Ecological fallacy; may misrepresent the actual population in gentrified areas | Acceptable if disclosed with clear caveats in the visualization |
+| Hardcoding SVG person positions as absolute coordinates | Quick to adjust individually | Positions do not follow room layout changes; every room move requires re-centering | Only for initial placement; must compute from room bounds before layout is stable |
+| Skipping real touch device testing | Saves setup time | Touch behavior in DevTools emulation differs from real hardware; sticky hover and event sequence bugs invisible in emulation | Never for touch-primary use cases |
+
+## Integration Gotchas
+
+| Integration | Common Mistake | Correct Approach |
+|-------------|----------------|------------------|
+| CDC NVSR life expectancy data | Using provisional VSRR estimates instead of final state life tables | Use NVSR Volume 74, Number 12 (US State Life Tables, 2022); provisional estimates have different methodology and numbers |
+| KFF uninsured rate | Mixing total-population and non-elderly-population rates across states | Pick one denominator (non-elderly, ages 0-64 is KFF standard) and use it for all states; document the denominator in the visualization |
+| MAP voter turnout | Using VAP-based rates when VEP-based is standard | MIT Election Lab and MAP both publish VEP turnout; confirm which table the existing data came from before verifying against a new source |
+| Stella Saffo transcript | Treating educational-consent content as public-display-consent content | Confirm consent scope covers the specific display context (public kiosk/interactive presentation) before using any transcript content verbatim |
+
+## Performance Traps
+
+| Trap | Symptoms | Prevention | When It Breaks |
+|------|----------|------------|----------------|
+| Inline style objects recreated on every render | Subtle jank on hover in SVG maps with 59+ districts | Hoist static style objects outside component functions | Noticeable at 60fps animation threshold; not a concern for static styles |
+| SMIL animations on many SVG elements | Battery drain and heat on mobile/kiosk hardware | Limit `<animate>` elements to 2-3 visible simultaneously; pause off-screen animations | Kiosk hardware running continuously for 8+ hours |
+| `<style>` tag with Google Fonts import inside component | Font re-request on every render | Move `<style>` tag to `index.html` or a top-level effect that runs once | Not a performance issue at small scale, but wastes network round-trips |
 
 ## UX Pitfalls
 
@@ -290,6 +471,8 @@ Story research phase, early -- before the other three stories are finalized, so 
 | Story timelines with only health/policy events | Feels like a litany of suffering; emotional exhaustion | Include community moments, family milestones, agency and resilience events |
 | Jargon-heavy labels ("civic engagement index," "SVI score") | General public audience cannot interpret the data | Plain-language labels with expandable definitions |
 | No way to see the data behind the visualization | Undermines trust for skeptical users | "View data sources" or "How we calculated this" expandable for each metric |
+| Back arrow only (no breadcrumbs) on a multi-level drill-down | User at Level 3 must tap back 4 times to reach title screen | Both back arrow (one level) and breadcrumbs (jump to US Map or NYC Map) |
+| Touch targets under 44px on kiosk hardware | Frequent missed taps, user frustration | Minimum 44x44 CSS pixels for all interactive elements; 48x48 preferred for primary navigation |
 
 ## "Looks Done But Isn't" Checklist
 
@@ -301,6 +484,11 @@ Story research phase, early -- before the other three stories are finalized, so 
 - [ ] **Immigration stories:** Often conflating legal statuses -- verify the undocumented and LPR stories use precise, distinct policy language
 - [ ] **Source registry:** Often nonexistent -- verify a structured mapping of every displayed data point to its primary source exists
 - [ ] **Color system:** Often inaccessible -- verify all color encodings pass WCAG AA and do not rely on color alone for meaning
+- [ ] **SVG text overflow:** Often invisible until tested at multiple viewport sizes -- verify no text label exceeds room bounds at 1280x800 minimum
+- [ ] **Touch hover state:** Often sticky after first tap -- verify tap on any interactive element, then lift finger, and check that tooltip/highlight disappears
+- [ ] **Back navigation:** Often untested on real touch hardware -- verify back arrow and breadcrumbs work on the actual kiosk device, not just desktop Chrome
+- [ ] **Stat definitions:** Often verified by number only -- verify that the denominator for each metric matches what the label implies (non-elderly uninsured vs. total-population uninsured)
+- [ ] **Transcript consent scope:** Often assumed -- verify Stella Saffo's consent covers public interactive display, not just educational presentation
 
 ## Recovery Strategies
 
@@ -312,6 +500,11 @@ Story research phase, early -- before the other three stories are finalized, so 
 | Redlining oversimplification | MEDIUM | Add gentrification context to story narrative; source neighborhood demographic change data; may require additional visualization element |
 | Indefensible data claims | HIGH | Audit every data point; build source registry retroactively; may require removing data points that cannot be sourced to primary sources |
 | Inaccessible SVG visualizations | HIGH | Retrofitting ARIA labels and keyboard navigation into existing SVG components is significantly more work than building accessibly from the start |
+| SVG coordinate cascades | LOW | Recalculate affected coordinates as a batch; do not patch one element at a time |
+| Sticky hover on touch | LOW | Add onTouchEnd handlers that clear hover state; 1-2 hours of work per interactive SVG layer |
+| Breadcrumb state transition bugs | MEDIUM | Constrain breadcrumbs to backward-only navigation; test all possible jump paths |
+| Stat definition mismatch | MEDIUM | Re-pull all affected metrics with correct denominators; update source documentation |
+| Transcript consent scope unclear | HIGH | May require removing real-transcript content and rebuilding stories from published statistical composites; consent scope must be confirmed before any display content is written |
 
 ## Pitfall-to-Phase Mapping
 
@@ -328,6 +521,12 @@ Story research phase, early -- before the other three stories are finalized, so 
 | Color-coding problems | Design/visualization phase | Color palette review against Do No Harm guide checklist; colorblind simulation test |
 | Stale data | Data integration | Every displayed metric includes source and year |
 | Fourth archetype tokenism | Story research (early) | Fourth story illustrates a mechanism not covered by other three stories |
+| SVG coordinate cascades | Hospital scene layout fix | Person positions computed from department bounds, not hardcoded; text fits within room height |
+| SVG text overflow | Hospital scene layout fix + transcript integration | No text label exceeds container bounds at 1280x800 viewport; character budgets documented |
+| Transcript identifiability risk | Before transcript integration begins | Consent scope confirmed; story content editorially transformed, not directly quoted; disclosure statement present |
+| Stat definition mismatch | Data verification phase | Each metric's denominator definition documented alongside the value; 5-state cross-check completed |
+| Sticky hover on touch | Touch navigation phase | Tap-lift test on real touch hardware passes for all interactive elements |
+| Breadcrumb impossible state | Touch navigation phase | Back arrow navigates exactly one level; breadcrumbs never navigate to a level higher than current |
 
 ## Sources
 
@@ -343,7 +542,14 @@ Story research phase, early -- before the other three stories are finalized, so 
 - [Telling Truth with Data Visuals -- Springer](https://link.springer.com/article/10.1057/s41271-024-00479-0) -- 4E principles for public health visualization
 - [Transforming Civic Data Systems -- Stanford Social Innovation Review](https://ssir.org/articles/entry/data-justice-equity-sovereignty) -- Data sovereignty and community self-determination
 - [DATA VISUALIZATION AND HEALTH EQUITY BEST PRACTICES CHECKLIST](https://partnersforfamilyhealth.org/wp-content/uploads/2018/11/HEALTH_EQUITY_DATA_VISUALIZATION_CHECKLIST.pdf) -- Practical checklist for health equity visualization
+- [US State Life Tables, 2022 -- CDC NVSR Volume 74, Number 12](https://www.cdc.gov/nchs/data/nvsr/nvsr74/nvsr74-12.pdf) -- Authoritative source for state-level life expectancy
+- [Key Facts about the Uninsured Population -- KFF](https://www.kff.org/uninsured/key-facts-about-the-uninsured-population/) -- KFF methodology for uninsured rate denominators
+- [Protecting Patient Privacy in Narratives: Lifespan-Brown Checklist -- PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6519768/) -- Clinical narrative consent and de-identification standards
+- [React onMouseLeave unreliability -- GitHub Issue #4492](https://github.com/facebook/react/issues/4492) -- Known React issue with hover events in Chrome
+- [Touch Device interaction -- React Flow docs](https://reactflow.dev/examples/interaction/touch-device) -- Touch event handling patterns in SVG/canvas React contexts
+- [6 Common SVG Fails -- CSS-Tricks](https://css-tricks.com/6-common-svg-fails-and-how-to-fix-them/) -- SVG layout and overflow pitfalls
+- [Touch Target Size -- Deque Docs](https://docs.deque.com/devtools-mobile/2025.7.2/en/ios-touch-target-size/) -- Minimum touch target size standards
 
 ---
 *Pitfalls research for: Civic Health Alliance -- civic health data visualization with stories of marginalized communities*
-*Researched: 2026-03-10*
+*Researched: 2026-03-10, implementation pitfalls added 2026-03-24*
