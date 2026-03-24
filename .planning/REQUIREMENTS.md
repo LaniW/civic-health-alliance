@@ -1,7 +1,7 @@
 # Requirements: Civic Health Alliance
 
 **Defined:** 2026-03-24
-**Core Value:** Accurate, real data and stories — fully navigable on touch screens
+**Core Value:** Accurate, real data and stories -- fully navigable on touch screens
 
 ## v1 Requirements
 
@@ -48,7 +48,7 @@ Deferred to future milestone. Tracked but not in current roadmap.
 
 | Feature | Reason |
 |---------|--------|
-| Code decomposition into multiple files | Not part of this milestone — single-file structure preserved |
+| Code decomposition into multiple files | Not part of this milestone -- single-file structure preserved |
 | New zoom levels or data dimensions | Current 4-level structure is final |
 | Backend / API / database | Data stays embedded in JS |
 | Mobile responsive layout | App targets kiosk/presentation, not mobile browsers |
@@ -63,24 +63,24 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | - | Pending |
-| NAV-02 | - | Pending |
-| NAV-03 | - | Pending |
-| NAV-04 | - | Pending |
-| HOSP-01 | - | Pending |
-| HOSP-02 | - | Pending |
-| HOSP-03 | - | Pending |
-| STORY-01 | - | Pending |
-| STORY-02 | - | Pending |
-| DATA-01 | - | Pending |
-| DATA-02 | - | Pending |
-| DATA-03 | - | Pending |
+| NAV-01 | Phase 2 | Pending |
+| NAV-02 | Phase 2 | Pending |
+| NAV-03 | Phase 2 | Pending |
+| NAV-04 | Phase 2 | Pending |
+| HOSP-01 | Phase 3 | Pending |
+| HOSP-02 | Phase 3 | Pending |
+| HOSP-03 | Phase 3 | Pending |
+| STORY-01 | Phase 1 | Pending |
+| STORY-02 | Phase 4 | Pending |
+| DATA-01 | Phase 4 | Pending |
+| DATA-02 | Phase 4 | Pending |
+| DATA-03 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 12 total
-- Mapped to phases: 0
-- Unmapped: 12
+- Mapped to phases: 12
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after initial definition*
+*Last updated: 2026-03-24 after roadmap creation*
