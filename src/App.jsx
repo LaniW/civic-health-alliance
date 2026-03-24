@@ -197,18 +197,73 @@ const NYC_DISTRICTS = [
 function leColor(le){return le>=86?"#15803d":le>=82?"#65a30d":le>=79?"#eab308":"#dc2626";}
 function engagementColor(t){return t>=70?"#15803d":t>=64?"#65a30d":t>=58?"#eab308":"#dc2626";}
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   PATIENT STORIES — told by Dr. Stella Saffo
+   ═══════════════════════════════════════════════════════════════════════════ */
 const HOSPITAL_PEOPLE=[
-  {id:"maria",name:"Maria Santos",role:"Patient & Parent Advocate",x:60,y:69,color:"#e74c3c",age:34,bg:"Home health aide, mother of two. Her son Mateo was diagnosed with elevated lead levels at age 4 — caught early because parents organized at city council to fund lead screening.",timeline:[{date:"Mar 2019",type:"health",title:"Son's behavioral issues flagged",detail:"Pediatrician orders lead test — this screening only exists because parents organized at city council."},{date:"Jun 2019",type:"health",title:"Mateo diagnosed: BLL 8 μg/dL",detail:"Neighboring zip codes without the advocacy-funded program have detection delays of 14 months."},{date:"Sep 2019",type:"civic",title:"First community board meeting",detail:"Maria testifies about housing conditions. Landlord cited for lead paint violations within 6 weeks."},{date:"Nov 2020",type:"civic",title:"Votes for the first time",detail:"Also volunteers as poll worker. District turnout increases 8% over 2016."},{date:"Mar 2021",type:"civic",title:"Participatory budgeting vote",detail:"Votes to fund mobile health van and doula program. Both win. Van serves 1,200 residents/year."},{date:"Aug 2021",type:"health",title:"28-day wait for primary care",detail:"Suspected thyroid issue. Specialist referral takes 6 more weeks. Misses 3 days of work (~$480)."},{date:"Jan 2022",type:"civic",title:"Testifies at state health hearing",detail:"Her testimony cited in a report recommending Medicaid rate increases for community health centers."},{date:"Jun 2023",type:"health",title:"Mateo's BLL drops to 3.5 μg/dL",detail:"Monitoring + housing remediation from Maria's advocacy cut exposure significantly."},{date:"Nov 2023",type:"civic",title:"Misses health board election",detail:"Working a double shift. Turnout: 6%. Dental funding dies in committee for the 4th straight year."}]},
-  {id:"dr-okafor",name:"Dr. Adaeze Okafor",role:"Primary Care Physician",x:29,y:36,color:"#2980b9",age:41,bg:"One of only 3 PCPs at the center, serving 850 patients each. Returned to the South Bronx after a decade in suburban practice.",timeline:[{date:"2018",type:"health",title:"Joins Mott Haven CHC",detail:"Patient panel immediately reaches 850 — triple the recommended 300-400 for quality care."},{date:"2019",type:"civic",title:"Testifies on Medicaid reimbursement",detail:"Tells legislators that low rates make recruiting impossible. Helps secure a 4% rate increase."},{date:"2020",type:"health",title:"COVID overwhelms the center",detail:"Mott Haven's hospitalization rate is 3x the Manhattan average. Works 14-hour days for months."},{date:"2021",type:"civic",title:"Organizes provider coalition",detail:"Brings together 12 community health centers to lobby collectively. Wins $2.4M in emergency staffing funds."},{date:"2023",type:"health",title:"Burnout forces reduced hours",detail:"No replacement hired. Wait times rise from 21 to 28 days. 200 patients reassigned to full colleagues."}]},
-  {id:"james",name:"James Whitfield",role:"Uninsured Patient",x:72,y:36,color:"#8e44ad",age:52,bg:"Construction worker without employer insurance. Makes too much for Medicaid, too little for marketplace. Relies on sliding-scale fees.",timeline:[{date:"Jan 2021",type:"health",title:"Persistent chest pain begins",detail:"Ignores it for 3 months — can't afford to miss work for an appointment."},{date:"Jun 2021",type:"health",title:"Visits community health center",detail:"Diagnosed with hypertension. Sliding-scale fee: $20 vs $250 at nearby hospital."},{date:"2022",type:"civic",title:"Insurance navigator workshop",detail:"Community org helps him find a plan he didn't know he qualified for. Premiums: $45/month."},{date:"2023",type:"health",title:"Checkups catch pre-diabetes",detail:"Early intervention. Without the navigator program (funded by advocacy), this goes undetected."}]},
-  {id:"sofia",name:"Sofia Chen",role:"Dental Patient, Age 9",x:30,y:71,color:"#e67e22",age:9,bg:"Third-grader with severe tooth decay. On the dental waitlist for 8 months. Her school's dental program was defunded when the health board election had 6% turnout.",timeline:[{date:"Sep 2022",type:"health",title:"School nurse flags dental pain",detail:"Sofia has 4 cavities and an abscess. Referred to community health center dental clinic."},{date:"Oct 2022",type:"health",title:"Placed on 8-month waitlist",detail:"Dental dept has 1 dentist for 2,100 patients. Funding proposal died in committee."},{date:"Mar 2023",type:"health",title:"ER visit for dental abscess",detail:"Cost to Medicaid: $1,800. A preventive filling would have been $120."},{date:"Jun 2023",type:"health",title:"Finally seen — 3 extractions needed",detail:"Dentist notes this was entirely preventable with earlier access."},{date:"Nov 2023",type:"civic",title:"Health board election — 6% turnout",detail:"Incumbent who blocked dental expansion runs unopposed. Sofia's mother didn't know the election existed."}]},
+  {
+    id:"dr-saffo",
+    name:"Dr. Stella Saffo",
+    role:"HIV & Infectious Disease Physician",
+    x:29,y:36,
+    color:"#2980b9",
+    bg:"An HIV specialist at a community health center in New York, Dr. Saffo cares for some of the city's most vulnerable patients — navigating daily the intersection of public health, insurance policy, and human dignity. These are her patients' stories.",
+    timeline:[
+      {date:"Daily",type:"health",title:"Carrying the weight of these stories",detail:"Dr. Saffo sees the system from the inside. Every discharge, every coverage lapse, every contract dispute — she witnesses them and continues to care for patients anyway."},
+      {date:"Ongoing",type:"civic",title:"Documenting systemic failures",detail:"Physicians like Dr. Saffo are often the only witnesses to how insurance gaps and state policy differences determine who lives, who loses their doctor, and who finds a home."},
+      {date:"Ongoing",type:"civic",title:"What policy looks like in a room",detail:"The difference between New York and North Carolina — in housing benefits for people living with HIV — is not an abstraction. It is whether a mother and her unborn child have a roof."},
+      {date:"Ongoing",type:"health",title:"'It ended up being an insurance issue that killed him.'",detail:"When a Medicaid benefit limit ends a life, it is not a medical failure. It is a policy failure — one made far from the hospital bed, in rooms shaped by who votes and who shows up."},
+    ]
+  },
+  {
+    id:"patient-one",
+    name:"Patient Story: A Man With Pancreatitis",
+    role:"Medicaid Patient Living With HIV",
+    x:60,y:36,
+    color:"#e74c3c",
+    bg:"He was admitted with pancreatitis — a serious but treatable condition. He was managing his HIV well. That was not the crisis. His Medicaid benefits ran out before he recovered. The hospital discharged him home. He died that night.",
+    timeline:[
+      {date:"Admission",type:"health",title:"Admitted for pancreatitis",detail:"A treatable condition. He was managing his HIV well — that was not in crisis. The hospitalization was for pancreatitis."},
+      {date:"Mid-stay",type:"civic",title:"Medicaid benefits exhausted",detail:"Coverage ran out before his recovery was complete. No extension was granted. The system had a limit, and he had reached it."},
+      {date:"Discharge day",type:"civic",title:"Hospital discharged him home",detail:"Without coverage, the hospital sent him home. There was no mechanism in the system to keep him. He left before he was well."},
+      {date:"That night",type:"health",title:"He coded and died",detail:"He died from pancreatitis complications the same night he was discharged. As Dr. Saffo said: 'It wasn't HIV that killed him. It ended up being an insurance issue that killed him.'"},
+    ]
+  },
+  {
+    id:"patient-two",
+    name:"Patient Story: A Young Man Newly Diagnosed",
+    role:"HIV-Positive, Mid-20s",
+    x:72,y:69,
+    color:"#8e44ad",
+    bg:"Diagnosed with HIV in his mid-20s — rare today, when PrEP has made new infections among young people uncommon. He was struggling with the diagnosis. But he was excited about his care. He was getting comfortable. Then an insurance contract dispute ended all of that.",
+    timeline:[
+      {date:"Last year",type:"health",title:"Diagnosed with HIV in his 20s",detail:"Young people are rarely diagnosed today because of PrEP availability. He was shaken, despondent — but engaging with his care and showing up."},
+      {date:"Months in",type:"health",title:"Finding his footing",detail:"He was 'very excited' about his care plan. A good plan, good resources, a provider he trusted. He was stabilizing — medically and emotionally."},
+      {date:"Contract dispute",type:"civic",title:"Hospital drops his insurance",detail:"The hospital and his insurer couldn't reach a contract agreement. The dispute had nothing to do with his health or his choices. He lost his provider anyway."},
+      {date:"Aftermath",type:"health",title:"Starting over — just as he'd found his footing",detail:"He was 'nervous to have to go to a new HIV doctor.' He'd just gotten comfortable. The relationship that had helped him feel safe — disrupted not by him, but by a billing negotiation between institutions."},
+    ]
+  },
+  {
+    id:"patient-three",
+    name:"Patient Story: A Pregnant Woman With HIV",
+    role:"Formerly Homeless, Mother of Six",
+    x:30,y:69,
+    color:"#e67e22",
+    bg:"She came to New York pregnant, homeless, and living with HIV. Five children had been removed by child protective services in North Carolina. She was carrying her sixth. New York State's benefits — tied to HIV status and pregnancy — gave her something her home state never had: a home.",
+    timeline:[
+      {date:"North Carolina",type:"civic",title:"Five children removed by CPS",detail:"She was living with HIV in a state with limited support programs. Her children were removed. She had few pathways to stability."},
+      {date:"Arrived in NY",type:"health",title:"Homeless and pregnant with her sixth child",detail:"She arrived without housing. Managing HIV. Pregnant. The odds were steep — but New York has policies that other states do not."},
+      {date:"New York",type:"civic",title:"Housing secured through state benefits",detail:"New York offers housing support tied to HIV status and pregnancy — a combination of protections not available in North Carolina or many other states. She was housed."},
+      {date:"Today",type:"health",title:"Stable, housed, in care",detail:"'Lucky for her, New York State offers some good benefits,' Dr. Saffo said. What feels like luck is actually policy — and policy is shaped by who votes, who testifies, and who organizes."},
+    ]
+  },
 ];
 
 const DEPARTMENTS=[
-  {id:"primary",label:"Primary Care",x:14,y:22,w:30,h:28,wait:28,severity:"high",note:"1 PCP per 850 patients"},
-  {id:"waiting",label:"Waiting Room",x:56,y:22,w:32,h:28,wait:null,severity:"low",note:"Average 2.5 hr wait"},
-  {id:"pediatrics",label:"Pediatrics",x:46,y:55,w:28,h:28,wait:14,severity:"medium",note:"Advocacy-funded screening"},
-  {id:"dental",label:"Dental",x:18,y:55,w:24,h:28,wait:56,severity:"critical",note:"Funding stalled 4 yrs"},
+  {id:"hivid",label:"HIV / Infectious Disease",x:14,y:22,w:30,h:28,metric:"3 providers",metricLabel:"850+ patients each",severity:"high",note:"Continuity of care = survival"},
+  {id:"insurance",label:"Insurance Navigation",x:56,y:22,w:32,h:28,metric:"CONTRACT",metricLabel:"disputes disrupt care",severity:"critical",note:"Network gaps cost lives"},
+  {id:"maternal",label:"Maternal & HIV Care",x:46,y:55,w:28,h:28,metric:"NY vs. NC",metricLabel:"policy gap",severity:"medium",note:"State law determines access"},
+  {id:"casemanagement",label:"Benefits & Housing",x:18,y:55,w:24,h:28,metric:"MEDICAID",metricLabel:"benefit limits",severity:"high",note:"Coverage gaps = discharge"},
 ];
 
 const sevColor={low:"#a3a3a3",medium:"#f59e0b",high:"#ea580c",critical:RED};
@@ -237,12 +292,12 @@ function Pulse({cx,cy,r=6,color=RED}){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   LEFT PANEL — chapter + legend + hover info + nav arrows
+   LEFT PANEL
    ═══════════════════════════════════════════════════════════════════════════ */
 const CHAPTERS=[
   {ch:"Chapter 1",title:"The National Picture",body:"States where residents vote more tend to have lower uninsured rates and higher life expectancies. The correlation is striking — and it's not coincidental. Local health policy is shaped by who shows up at the ballot box, who testifies at hearings, and who organizes their neighbors.",cta:"Hover any colored state. Click New York to zoom in."},
   {ch:"Chapter 2",title:"12 Miles, 12 Years",body:"In New York City, the gap between a life expectancy of 89.9 and 75.1 is a single subway ride. Neighborhoods with higher voter turnout consistently invest more in preventive care, mental health services, and community clinics — turning ballots into years of life.",cta:"Hover over neighborhoods. Click the pulsing dot in the Bronx."},
-  {ch:"Chapter 3",title:"Inside the Walls",body:"Every department in this community health center tells a story about civic power — or its absence. A 56-day dental wait exists because a funding vote died in committee. A 28-day primary care wait persists because Medicaid rates weren't raised.",cta:"Hover rooms for data. Click any person to explore their story."},
+  {ch:"Chapter 3",title:"Inside the Walls",body:"Every story in this health center shows how policy shapes survival. Medicaid benefit limits, hospital-insurer contract disputes, and state-level decisions about who gets housing — these determine who lives, who loses their provider, and who finds a home. Dr. Stella Saffo witnesses these outcomes daily.",cta:"Hover rooms for data. Click any person to explore their story."},
 ];
 
 function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
@@ -260,7 +315,6 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
       borderRight:`2px solid rgba(184,18,14,0.18)`,
       overflowY:"auto",
     }}>
-      {/* Chapter text box */}
       <div style={{...panelCard, margin:"18px 18px 0", flexShrink:0}}>
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:10,fontWeight:500,letterSpacing:2.5,textTransform:"uppercase",color:"#9ca3af",marginBottom:8}}>{ch.ch}</p>
         <h3 style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:26,fontWeight:900,color:"#1a1a1a",lineHeight:1.1,marginBottom:14,letterSpacing:-0.3}}>{ch.title}</h3>
@@ -268,7 +322,6 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,fontWeight:600,color:RED,paddingTop:12,borderTop:`1px solid rgba(184,18,14,0.20)`}}>{ch.cta}</p>
       </div>
 
-      {/* Level 0 — Voter Turnout Legend */}
       {level===0&&(
         <div style={{...panelCard, margin:"14px 18px 0", flexShrink:0}}>
           <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,fontWeight:700,color:"#1a1a1a",marginBottom:14,textTransform:"uppercase",letterSpacing:0.5}}>Voter Turnout</p>
@@ -289,7 +342,6 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
         </div>
       )}
 
-      {/* Level 0 — hovered state stats */}
       {level===0&&hovStateData&&(
         <div style={{...panelCard,margin:"14px 18px 0",flexShrink:0,animation:"fadeIn 0.15s ease-out"}}>
           <h4 style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:16,fontWeight:800,marginBottom:12,color:"#1a1a1a",borderBottom:`2px solid ${RED}`,paddingBottom:8}}>{hovStateData.name}</h4>
@@ -307,7 +359,6 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
         </div>
       )}
 
-      {/* Level 1 — Life Expectancy Gap */}
       {level===1&&(
         <div style={{...panelCard,margin:"14px 18px 0",flexShrink:0}}>
           <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,fontWeight:700,color:"#1a1a1a",marginBottom:14,textTransform:"uppercase",letterSpacing:0.5}}>Life Expectancy Gap</p>
@@ -343,7 +394,6 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
         </div>
       )}
 
-      {/* Level 1 — hovered neighborhood */}
       {level===1&&hovHoodData&&(
         <div style={{...panelCard,margin:"14px 18px 0",flexShrink:0,animation:"fadeIn 0.15s ease-out"}}>
           <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
@@ -360,10 +410,8 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
         </div>
       )}
 
-      {/* Spacer */}
       <div style={{flex:1}}/>
 
-      {/* Nav arrows — flush to bottom */}
       <div style={{
         padding:"16px 18px",
         borderTop:`1px solid rgba(184,18,14,0.18)`,
@@ -441,21 +489,24 @@ function NYCMap({hovered,onHover,onZoomCenter}){
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HOSPITAL
+   PERSON FIGURE
    ═══════════════════════════════════════════════════════════════════════════ */
 function PersonFig({x,y,color,variant="adult"}){
   const s=0.45;
   return(<g transform={`translate(${x},${y}) scale(${s})`}>
-    {variant==="child"?<>
-      <circle cx={0} cy={0} r={2.4} fill={color}/><rect x={-2.5} y={3} width={5} height={7} rx={1.5} fill={color} opacity={0.85}/>
-      <line x1={-2.5} y1={5} x2={-5} y2={8} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
-      <line x1={2.5} y1={5} x2={5} y2={8} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
-      <line x1={-1} y1={10} x2={-1.5} y2={15} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
-      <line x1={1} y1={10} x2={1.5} y2={15} stroke={color} strokeWidth={1.4} strokeLinecap="round"/>
+    {variant==="doctor"?<>
+      <circle cx={0} cy={0} r={3} fill={color}/>
+      <rect x={-3.5} y={4} width={7} height={10} rx={2} fill={color} opacity={0.85}/>
+      <rect x={-4} y={4} width={8} height={10} rx={2} fill="none" stroke="#fff" strokeWidth={0.5} opacity={0.4}/>
+      <line x1={-3.5} y1={6} x2={-6.5} y2={10} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
+      <line x1={3.5} y1={6} x2={6.5} y2={10} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
+      <line x1={-1.5} y1={14} x2={-2.2} y2={20} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
+      <line x1={1.5} y1={14} x2={2.2} y2={20} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
+      {/* stethoscope */}
+      <path d="M-1 4 Q-3 8 -1 10" fill="none" stroke="#fff" strokeWidth={0.6} opacity={0.7}/>
     </>:<>
       <circle cx={0} cy={0} r={3} fill={color}/><circle cx={-0.8} cy={-0.6} r={0.7} fill="#fff" opacity={0.3}/>
       <rect x={-3.5} y={4} width={7} height={10} rx={2} fill={color} opacity={0.85}/>
-      {variant==="doctor"&&<rect x={-4} y={4} width={8} height={10} rx={2} fill="none" stroke="#fff" strokeWidth={0.5} opacity={0.4}/>}
       <line x1={-3.5} y1={6} x2={-6.5} y2={10} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
       <line x1={3.5} y1={6} x2={6.5} y2={10} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
       <line x1={-1.5} y1={14} x2={-2.2} y2={20} stroke={color} strokeWidth={1.6} strokeLinecap="round"/>
@@ -464,6 +515,9 @@ function PersonFig({x,y,color,variant="adult"}){
   </g>);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEALTH CENTER SCENE
+   ═══════════════════════════════════════════════════════════════════════════ */
 function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,onHoverDept}){
   return(
     <svg viewBox="0 0 100 96" style={{width:"100%",height:"100%"}}>
@@ -471,37 +525,50 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
         <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f8f5ee"/><stop offset="100%" stopColor="#ede9e0"/></linearGradient>
         <pattern id="gp" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M 4 0 L 0 0 0 4" fill="none" stroke="#e2ded4" strokeWidth="0.1"/></pattern>
       </defs>
+
+      {/* building */}
       <rect x={6} y={10} width={88} height={80} rx={1.5} fill="url(#bg)" stroke="#c8c3b8" strokeWidth={0.4}/>
       <rect x={6} y={10} width={88} height={80} fill="url(#gp)" opacity={0.4}/>
+
+      {/* header bar */}
       <rect x={6} y={4} width={88} height={9} rx={1} fill="#1a1a1a"/>
       <rect x={47} y={1} width={6} height={4} rx={0.8} fill="#1a1a1a"/>
       <rect x={49.5} y={1.5} width={0.8} height={2.8} rx={0.3} fill={RED}/>
       <rect x={48} y={2.3} width={4} height={0.8} rx={0.3} fill={RED}/>
-      <text x={50} y={9.5} textAnchor="middle" style={{fontSize:2.4,fontFamily:"'Libre Franklin',sans-serif",fill:"#faf8f3",fontWeight:700,letterSpacing:0.2}}>MOTT HAVEN COMMUNITY HEALTH CENTER</text>
-      <text x={50} y={12} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>8,400 patients · 62 staff · Est. 2004</text>
+      <text x={50} y={9.5} textAnchor="middle" style={{fontSize:2.4,fontFamily:"'Libre Franklin',sans-serif",fill:"#faf8f3",fontWeight:700,letterSpacing:0.2}}>COMMUNITY HEALTH CENTER</text>
+      <text x={50} y={12} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>Real patients · Real policy outcomes · Told by Dr. Stella Saffo</text>
+
+      {/* floor divider */}
       <line x1={6} y1={52} x2={94} y2={52} stroke="#c8c3b8" strokeWidth={0.3}/>
       <text x={9} y={19} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>2F</text>
       <text x={9} y={57} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>1F</text>
+
+      {/* departments */}
       {DEPARTMENTS.map(d=>{const isH=hoveredDept===d.id;return(
         <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)}>
           <rect x={d.x} y={d.y} width={d.w} height={d.h} rx={0.8} fill={isH?"#fff":"rgba(255,255,255,0.5)"} stroke={sevColor[d.severity]} strokeWidth={isH?0.7:0.35} strokeDasharray={d.severity==="critical"?"1.2,0.6":"none"} style={{transition:"all 0.15s"}}/>
-          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:2.4,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
-          {d.wait!==null&&<><text x={d.x+d.w/2} y={d.y+8} textAnchor="middle" style={{fontSize:3.5,fontFamily:"'JetBrains Mono',monospace",fill:d.wait>30?RED:"#059669",fontWeight:700}}>{d.wait}</text>
-            <text x={d.x+d.w/2} y={d.y+10.5} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>day wait</text></>}
+          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
+          {d.metric&&<>
+            <text x={d.x+d.w/2} y={d.y+9} textAnchor="middle" style={{fontSize:3.2,fontFamily:"'JetBrains Mono',monospace",fill:d.severity==="critical"?RED:d.severity==="high"?"#ea580c":"#059669",fontWeight:700}}>{d.metric}</text>
+            <text x={d.x+d.w/2} y={d.y+12} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.metricLabel}</text>
+          </>}
           <text x={d.x+d.w/2} y={d.y+d.h-2.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.note}</text>
         </g>);})}
+
+      {/* people */}
       {HOSPITAL_PEOPLE.map(p=>(
         <g key={p.id} onMouseEnter={()=>onHoverPerson(p.id)} onMouseLeave={()=>onHoverPerson(null)} onClick={()=>onClickPerson(p.id)} style={{cursor:"pointer"}}>
-          <PersonFig x={p.x} y={p.y} color={p.color} variant={p.id==="sofia"?"child":p.id==="dr-okafor"?"doctor":"adult"}/>
+          <PersonFig x={p.x} y={p.y} color={p.color} variant={p.id==="dr-saffo"?"doctor":"adult"}/>
           <Pulse cx={p.x} cy={p.y-3} r={0.8} color={p.color}/>
           {hoveredPerson===p.id&&<g>
-            <rect x={p.x-16} y={p.y-15} width={32} height={7} rx={1} fill="rgba(26,26,26,0.92)" stroke={RED} strokeWidth={0.2}/>
-            <text x={p.x} y={p.y-11.2} textAnchor="middle" style={{fontSize:2.4,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
-            <text x={p.x} y={p.y-9} textAnchor="middle" style={{fontSize:1.7,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
+            <rect x={p.x-18} y={p.y-16} width={36} height={8} rx={1} fill="rgba(26,26,26,0.93)" stroke={p.color} strokeWidth={0.25}/>
+            <text x={p.x} y={p.y-12} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
+            <text x={p.x} y={p.y-9.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
           </g>}
         </g>
       ))}
-      <text x={50} y={94} textAnchor="middle" style={{fontSize:1.8,fontFamily:"'Libre Franklin',sans-serif",fill:"#b0a999",fontStyle:"italic"}}>Hover rooms for data · Click any person to explore their story</text>
+
+      <text x={50} y={94} textAnchor="middle" style={{fontSize:1.8,fontFamily:"'Libre Franklin',sans-serif",fill:"#b0a999",fontStyle:"italic"}}>Hover rooms for context · Click any person to read their story</text>
     </svg>
   );
 }
@@ -511,24 +578,39 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
    ═══════════════════════════════════════════════════════════════════════════ */
 function PersonStory({person}){
   if(!person)return null;
+
+  const closingQuotes={
+    "dr-saffo":"She sees the system from the inside. Every benefit lapse, every contract dispute, every discharged patient — she witnesses it and continues to show up anyway. Her testimony is a record of what policy looks like inside a room.",
+    "patient-one":"He was managing HIV. Pancreatitis was treatable. What ended his life was a Medicaid benefit limit — a policy decision made far from his hospital bed, in rooms shaped by who votes and who shows up.",
+    "patient-two":"He was getting comfortable. A billing dispute between an insurer and a hospital — not his health, not his choices — forced him to start over. Insurance contracts are health policy. Health policy is civic power.",
+    "patient-three":"She got housed because New York has policies other states don't. What feels like luck is actually legislation — shaped by who votes, who testifies, and who organizes. The difference between states is the difference between a roof and none.",
+  };
+
   return(
     <div style={{padding:"28px 24px",maxWidth:640,margin:"0 auto"}}>
+      {/* header */}
       <div style={{display:"flex",gap:16,alignItems:"center",marginBottom:24}}>
         <div style={{width:52,height:52,borderRadius:"50%",background:person.color,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
           <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:22,color:"#fff",fontWeight:800}}>{person.name[0]}</span>
         </div>
         <div>
-          <h3 style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:20,fontWeight:800,color:"#1a1a1a",marginBottom:1}}>{person.name}, {person.age}</h3>
+          <h3 style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:20,fontWeight:800,color:"#1a1a1a",marginBottom:1}}>{person.name}</h3>
           <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:"#6b7280"}}>{person.role}</p>
         </div>
       </div>
+
+      {/* bio */}
       <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:14,lineHeight:1.75,color:"#4b5563",marginBottom:28}}>{person.bg}</p>
+
+      {/* legend */}
       <div style={{display:"flex",gap:16,marginBottom:20}}>
-        {[["health","Health Event"],["civic","Civic Action"]].map(([k,l])=>(
+        {[["health","Health Event"],["civic","Civic / Policy"]].map(([k,l])=>(
           <div key={k} style={{display:"flex",alignItems:"center",gap:5}}>
             <div style={{width:9,height:9,borderRadius:2,background:typeColor[k]}}/><span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:10,color:"#6b7280"}}>{l}</span>
           </div>))}
       </div>
+
+      {/* timeline */}
       <div style={{position:"relative",paddingLeft:18}}>
         <div style={{position:"absolute",left:4.5,top:0,bottom:0,width:1.5,background:"#e5e1d8"}}/>
         {person.timeline.map((t,i)=>{const tc=typeColor[t.type];return(
@@ -539,12 +621,11 @@ function PersonStory({person}){
             <div style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,lineHeight:1.7,color:"#4b5563",borderLeft:`2.5px solid ${tc}25`,paddingLeft:10}}>{t.detail}</div>
           </div>);})}
       </div>
+
+      {/* closing statement */}
       <div style={{background:"#1a1a1a",color:"#faf8f3",padding:"28px 24px",marginTop:32,textAlign:"center",border:`1px solid ${RED}`}}>
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:16,fontWeight:700,lineHeight:1.45,marginBottom:10}}>
-          {person.id==="maria"&&"Her son got screened because parents organized. Her housing got fixed because she testified. Her dental care stalled because nobody voted."}
-          {person.id==="dr-okafor"&&"She came home to serve her community. Low reimbursement rates — set without local input — mean she carries triple the recommended patient load."}
-          {person.id==="james"&&"He almost lost years of his life to a coverage gap. A navigator program, funded through local advocacy, caught him in time."}
-          {person.id==="sofia"&&"She waited 8 months for a $120 filling. The ER visit cost $1,800. The dental program died in an election with 6% turnout."}
+          {closingQuotes[person.id]}
         </p>
         <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,color:"#9ca3af"}}>Civic engagement isn't abstract — it is the mechanism by which need becomes care.</p>
       </div>
@@ -581,7 +662,6 @@ function NavBar({level,onHome,onGoUS,onGoNYC}){
       padding:"0 20px",gap:0,
       borderBottom:`2px solid ${RED}`,
     }}>
-      {/* Brand */}
       <button onClick={onHome} style={{
         background:"none",border:"none",
         fontFamily:"'Libre Franklin',sans-serif",
@@ -592,28 +672,9 @@ function NavBar({level,onHome,onGoUS,onGoNYC}){
 
       <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8}}/>
 
-      {/* US Map button */}
-      <button
-        onClick={onGoUS}
-        style={{
-          ...mapBtnBase,
-          background: usActive ? RED : "transparent",
-          color: usActive ? "#fff" : "#888",
-          borderBottom: usActive ? "none" : "none",
-        }}
-      >United States Map</button>
+      <button onClick={onGoUS} style={{...mapBtnBase,background:usActive?RED:"transparent",color:usActive?"#fff":"#888"}}>United States Map</button>
+      <button onClick={onGoNYC} style={{...mapBtnBase,background:nycActive?RED:"transparent",color:nycActive?"#fff":"#888"}}>New York City Map</button>
 
-      {/* NYC Map button */}
-      <button
-        onClick={onGoNYC}
-        style={{
-          ...mapBtnBase,
-          background: nycActive ? RED : "transparent",
-          color: nycActive ? "#fff" : "#888",
-        }}
-      >New York City Map</button>
-
-      {/* Deeper breadcrumbs */}
       {level===2&&(
         <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:4}}>
           <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
@@ -672,12 +733,7 @@ export default function App(){
         button:hover{opacity:0.88;}
       `}</style>
 
-      <NavBar
-        level={level}
-        onHome={()=>zoomTo(-1)}
-        onGoUS={()=>level!==0&&zoomTo(0)}
-        onGoNYC={()=>level<1&&zoomTo(1)}
-      />
+      <NavBar level={level} onHome={()=>zoomTo(-1)} onGoUS={()=>level!==0&&zoomTo(0)} onGoNYC={()=>level<1&&zoomTo(1)}/>
 
       {/* ── TITLE PAGE ── */}
       {level===-1&&(
@@ -698,7 +754,7 @@ export default function App(){
         </div>
       )}
 
-      {/* ── MAP LEVELS 0–2: side-by-side layout ── */}
+      {/* ── MAP LEVELS 0–2 ── */}
       {level>=0&&level<=2&&(
         <div style={{...anim,position:"absolute",inset:0,paddingTop:61,display:"flex"}}>
           <LeftPanel
