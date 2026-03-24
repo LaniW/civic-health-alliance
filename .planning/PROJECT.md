@@ -20,6 +20,7 @@ The visualization must present accurate, real data and stories — real patient 
 - ✓ Left panel with chapter narrative, legends, and data sources — existing
 - ✓ Hover interactions showing state/district/person details — existing
 - ✓ Zoom transitions with fade animation between levels — existing
+- ✓ PersonStory renders from data fields (person.summary), not hard-coded person IDs — Validated in Phase 1: Story Data Decoupling
 
 ### Active
 
@@ -75,4 +76,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after initialization*
+*Last updated: 2026-03-24 after Phase 1 completion*
