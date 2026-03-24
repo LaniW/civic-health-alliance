@@ -26,10 +26,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Success Criteria** (what must be TRUE):
   1. PersonStory component renders summary, timeline, and narrative from data fields on the person object -- not from conditional checks on person.id
   2. Changing a person's id in HOSPITAL_PEOPLE does not break or blank their story display
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md -- Add summary field to HOSPITAL_PEOPLE and replace person.id conditionals in PersonStory
 
 ### Phase 2: Touch Navigation
 **Goal**: Users can navigate the full four-level hierarchy forward and backward using only touch gestures -- no mouse, no browser back button required
