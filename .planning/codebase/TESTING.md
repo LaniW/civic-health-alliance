@@ -1,375 +1,440 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-03-10
+**Analysis Date:** 2026-03-24
 
 ## Test Framework
 
-**Status:** No testing framework currently configured or in use.
+**Status:** No testing framework is configured or in use.
 
-**Available Infrastructure (Not Currently Used):**
-- No Jest, Vitest, or other test runner installed
-- No test configuration files present (`jest.config.js`, `vitest.config.ts`, etc.)
-- No test files found in repository (`.test.js`, `.spec.js` patterns absent)
+- No test runner installed (no Jest, Vitest, Mocha, etc.)
+- No test configuration files (`jest.config.*`, `vitest.config.*`)
+- No test files anywhere in the repository
+- No test-related npm scripts in `package.json`
 
-**Testing Infrastructure Recommendation:**
-The project uses modern tools that support testing setup:
-- **Runtime:** Node.js with ES modules (`"type": "module"` in `package.json`)
-- **Build tool:** Vite (`vite`, `@vitejs/plugin-react`)
-- **React version:** 19.2.0
+**Runner:** None
 
-Suggested test setup would use:
-- **Vitest** (recommended for Vite projects)
-- **React Testing Library** (for component testing)
-- **@testing-library/user-event** (for user interaction testing)
+**Assertion Library:** None
+
+**Run Commands:**
+```bash
+# No test commands exist. These would need to be added:
+npm run lint    # ESLint only -- the sole quality check available
+npm run build   # Vite build -- fails on syntax errors and unresolved imports
+```
+
+## Linting Configuration
+
+**ESLint v9** with flat config format.
+
+**Config file:** `eslint.config.js`
+
+**Plugins and rulesets:**
+- `@eslint/js` -- core JavaScript recommended rules
+- `eslint-plugin-react-hooks` -- enforces Rules of Hooks
+- `eslint-plugin-react-refresh` -- validates Vite HMR compatibility
+
+**Custom rules:**
+```js
+rules: {
+  'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+}
+```
+This allows unused UPPER_CASE constants (like color constants and data that may only be referenced indirectly).
+
+**Language settings:**
+- ECMAScript 2020, latest parser features, JSX enabled
+- Browser globals (no Node globals)
+- ES modules source type
+
+**Ignored paths:** `dist/`
+
+**Run lint:**
+```bash
+npm install          # Required -- node_modules must exist
+npm run lint         # Runs: eslint .
+```
+
+**Current lint status:** Cannot run without `npm install` first (node_modules not present in repo). No known lint errors based on code inspection.
+
+## Build Validation
+
+**Vite build** provides basic validation:
+```bash
+npm run build        # Produces dist/ -- catches syntax errors and broken imports
+npm run preview      # Serves dist/ locally for manual verification
+```
+
+The build will fail on:
+- Syntax errors in JSX
+- Missing imports (unresolved modules)
+- Invalid JavaScript
+
+The build will NOT catch:
+- Runtime errors (null reference, bad data lookups)
+- Visual regressions
+- Interaction bugs
+- Logic errors in color functions or data transformations
+
+## Code Quality Tools
+
+**Configured:**
+| Tool | Purpose | Status |
+|------|---------|--------|
+| ESLint v9 | Static analysis, hooks rules | Configured, runnable |
+| Vite build | Syntax/import validation | Configured, runnable |
+
+**Not configured:**
+| Tool | Purpose | Recommendation |
+|------|---------|----------------|
+| Prettier | Code formatting | Not present -- would standardize inconsistent semicolons and quote styles |
+| TypeScript | Type checking | Not used -- JSX only, no type safety |
+| Vitest | Unit/component testing | Natural fit for Vite projects |
+| React Testing Library | Component testing | Standard for React component assertions |
+| Playwright/Cypress | E2E testing | Would cover drill-down navigation flows |
+| Storybook | Component isolation | Useful for SVG components (`Pulse`, `PersonFig`) |
+| Lighthouse CI | Performance/accessibility | Would catch accessibility issues in SVG maps |
 
 ## Test File Organization
 
 **Current State:** No test files exist.
 
-**Recommended Structure:**
-When tests are added, follow these patterns:
-
-**Location:**
-- Co-locate tests with source files in `src/` directory
-- Alternative: Create parallel `src/__tests__/` subdirectory
-
-**Naming:**
-- Pattern: `[ComponentName].test.jsx` for unit/component tests
-- Pattern: `[ComponentName].spec.jsx` for integration/behavior tests
-- Examples would be:
-  - `src/App.test.jsx` - Main App component tests
-  - `src/components/USMap.test.jsx` - Individual view component tests
-  - `src/utils/colors.test.js` - Utility function tests
-
-## Component Testability Analysis
-
-### Current Component Structure
-
-**File:** `src/App.jsx` (567 lines, single file with all logic)
-
-**Components Ready for Testing:**
-
-1. **`App` (Main Component)**
-   - Location: `src/App.jsx` (lines 488-568)
-   - What to test:
-     - Initial state (level should be -1)
-     - Navigation between levels (zoomTo callback)
-     - State management (hovState, hovHood, hovPerson, hovDept, selectedPerson)
-     - Conditional rendering based on level
-   - Dependencies: useState, useCallback
-   - Challenge: Large component with mixed concerns
-
-2. **`USMap` (Level 0 View)**
-   - Location: `src/App.jsx` (lines 264-298)
-   - What to test:
-     - SVG rendering with correct hex grid
-     - Hover state handling (onHover callback)
-     - Click handlers for NY state
-     - Hover state effects (opacity, stroke changes)
-   - Props: `hovered`, `onHover`, `onZoomNYC`
-   - Pure rendering component (can test snapshot + interactions)
-
-3. **`NYCMap` (Level 1 View)**
-   - Location: `src/App.jsx` (lines 302-335)
-   - What to test:
-     - NYC districts rendering
-     - Best/worst life expectancy calculation
-     - Hover state effects
-     - Click handlers for target districts
-   - Props: `hovered`, `onHover`, `onZoomCenter`
-
-4. **`HospitalScene` (Level 2 View)**
-   - Location: `src/App.jsx` (lines 360-403)
-   - What to test:
-     - Department rendering with correct severity colors
-     - Person figure positioning and color
-     - Hover state for persons and departments
-     - Click handlers for person selection
-   - Props: `hoveredPerson`, `onHoverPerson`, `onClickPerson`, `hoveredDept`, `onHoverDept`
-
-5. **`PersonStory` (Level 3 Detail View)**
-   - Location: `src/App.jsx` (lines 407-448)
-   - What to test:
-     - Null guard (returns null if no person)
-     - Person data display (name, role, age, background)
-     - Timeline rendering with correct event types
-     - Event type color mapping (health vs civic)
-   - Props: `person` (can be null)
-   - Challenge: Complex nested JSX with timeline data
-
-6. **`PersonFig` (SVG Illustration Component)**
-   - Location: `src/App.jsx` (lines 339-358)
-   - What to test:
-     - Correct SVG elements rendered for variant
-     - Color applied correctly
-     - Transform/scale applied
-   - Props: `x`, `y`, `color`, `variant` (child|adult|doctor)
-   - Ideal for snapshot testing
-
-7. **Utility Functions:**
-   - `leColor(le)` (line 194): Returns color based on life expectancy
-   - `engagementColor(t)` (line 250): Returns color based on threshold
-   - `Pulse` component (lines 252-260): Animated pulse indicator
-
-### Suggested Test Cases
-
-**Example: `leColor` function testing**
-```javascript
-describe('leColor', () => {
-  test('returns green for 86+', () => {
-    expect(leColor(86)).toBe("#15803d");
-  });
-  test('returns yellow-green for 82-85', () => {
-    expect(leColor(82)).toBe("#65a30d");
-  });
-  test('returns yellow for 79-81', () => {
-    expect(leColor(79)).toBe("#eab308");
-  });
-  test('returns red for < 79', () => {
-    expect(leColor(78)).toBe("#dc2626");
-  });
-});
+**Recommended location pattern** (co-located with source):
+```
+src/
+├── App.jsx
+├── App.test.jsx          # App integration tests
+├── utils/
+│   ├── colors.js         # Extracted color functions
+│   └── colors.test.js    # Unit tests for color logic
+├── components/
+│   ├── USMap.jsx
+│   ├── USMap.test.jsx
+│   ├── NYCMap.jsx
+│   ├── NYCMap.test.jsx
+│   └── ...
+└── __fixtures__/
+    └── testData.js        # Shared test data factories
 ```
 
-**Example: `USMap` component testing**
-```javascript
-describe('USMap', () => {
-  test('renders all state hexagons', () => {
-    const { container } = render(
-      <USMap hovered={null} onHover={() => {}} onZoomNYC={() => {}} />
-    );
-    // Check for polygon elements
-  });
+**Naming convention to follow:** `[FileName].test.jsx` for component tests, `[fileName].test.js` for pure function tests.
 
-  test('calls onHover when state is hovered', () => {
-    const onHover = vi.fn();
-    render(
-      <USMap hovered={null} onHover={onHover} onZoomNYC={() => {}} />
-    );
-    // Simulate hover on state hexagon
-    // Verify onHover was called with state code
-  });
+## Recommended Test Framework Setup
 
-  test('calls onZoomNYC when NY is clicked', () => {
-    const onZoomNYC = vi.fn();
-    render(
-      <USMap hovered={null} onHover={() => {}} onZoomNYC={onZoomNYC} />
-    );
-    // Simulate click on NY hexagon
-    // Verify onZoomNYC was called
-  });
-});
+**Install Vitest + React Testing Library:**
+```bash
+npm install -D vitest @testing-library/react @testing-library/jest-dom @testing-library/user-event jsdom
 ```
 
-## Mocking Requirements
+**Add test config to `vite.config.js`:**
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-**Not Currently Used:** No mocking is set up.
-
-**When to Mock:**
-- SVG interactions are difficult to test; consider mocking viewport calculations
-- Avoid mocking data constants (STATE_DATA, NYC_DISTRICTS, etc.) — use real data in tests
-- Mock event handlers passed as props to verify they're called correctly
-
-**Data to Not Mock:**
-- `STATE_DATA`: Real census/health data; keep in tests for accuracy verification
-- `NYC_DISTRICTS`: Geographic/demographic data; test with real values
-- Color mappings: Test actual color output
-
-**What to Mock:**
-- Browser APIs if added (localStorage, window.location, etc.)
-- External API calls (if added in future)
-- React's useState/useCallback behaviors (use vi.spyOn if needed)
-
-## Fixtures and Factories
-
-**Not Currently Used:** No test utilities or factories.
-
-**Recommended Structure (When Implemented):**
-
-Create `src/__tests__/fixtures/data.js`:
-```javascript
-export const mockPerson = (overrides = {}) => ({
-  id: "maria",
-  name: "Maria Santos",
-  role: "Patient & Parent Advocate",
-  age: 34,
-  bg: "...",
-  timeline: [],
-  ...overrides
-});
-
-export const mockDistrict = (overrides = {}) => ({
-  id: "BK01",
-  name: "Williamsburg, Greenpoint",
-  borough: "Brooklyn",
-  le: 84.4,
-  vt: 42.6,
-  ...overrides
-});
-```
-
-Create `src/__tests__/helpers/render.jsx`:
-```javascript
-import { render } from '@testing-library/react';
-
-export function renderWithProviders(component, options = {}) {
-  return render(component, { ...options });
-}
-```
-
-**Location:** `src/__tests__/fixtures/` and `src/__tests__/helpers/`
-
-## Coverage
-
-**Current:** No coverage configured or measured.
-
-**Recommended Setup (When Tests Added):**
-
-Add to `package.json`:
-```json
-"scripts": {
-  "test": "vitest",
-  "test:watch": "vitest --watch",
-  "test:coverage": "vitest --coverage"
-}
-```
-
-Vitest config in `vite.config.js`:
-```javascript
 export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/test-setup.js',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/__tests__/']
-    }
-  }
-});
+      exclude: ['node_modules/', 'src/__fixtures__/'],
+    },
+  },
+})
 ```
 
-**Suggested Coverage Targets:**
-- Utility functions (leColor, engagementColor): 100%
-- Component rendering: 80%+ (SVG complexity makes full coverage challenging)
-- Event handlers: 100% (critical for interactivity)
-- Data transformations (best/worst calculations): 100%
-
-## Test Types
-
-### Unit Tests
-
-**Scope:** Test individual functions and small components in isolation
-
-**Approach:**
-- Test utility functions directly: `leColor()`, `engagementColor()`
-- Test simple component rendering: `PersonFig` with different variants
-- Verify color mappings and calculations
-- Test component prop variations
-
-**Example Areas:**
-- Data constants are valid (no undefined values, all required fields present)
-- Color functions return expected hex values
-- Numeric thresholds work correctly
-
-### Component/Integration Tests
-
-**Scope:** Test components with their interactions and state management
-
-**Approach:**
-- Render full view components (USMap, NYCMap, HospitalScene)
-- Simulate user interactions (hover, click)
-- Verify state updates and callbacks
-- Test navigation between levels
-- Verify conditional rendering based on level/selection
-
-**Key Interactions to Test:**
-- Hovering over states/districts/people triggers visual changes
-- Clicking NYC or target district calls zoom callbacks
-- Selecting a person displays PersonStory
-- Navigation back from story returns to hospital view
-
-### E2E / Full Flow Tests
-
-**Status:** Not applicable for current setup (no E2E framework)
-
-**Consider Adding If:**
-- Multi-page navigation grows
-- API integration is added
-- Complex user workflows need verification
-
-**Tools (Future):**
-- Playwright or Cypress could test full user journeys
-- Example: "User can navigate from US map → NYC → Hospital → Person story and back"
-
-## Async Testing
-
-**Not Currently Used:** No async operations in components
-
-**When to Test Async:**
-- `zoomTo` callback uses `setTimeout` — should test timing
-- If API calls are added later
-
-**Pattern (When Needed):**
-```javascript
-test('navigation completes with correct animations', async () => {
-  const { rerender } = render(<App />);
-  fireEvent.click(screen.getByText('Begin'));
-
-  // Wait for animation phase to change
-  await waitFor(() => {
-    expect(screen.getByText(/U.S. Map/)).toBeInTheDocument();
-  }, { timeout: 600 });
-});
+**Create `src/test-setup.js`:**
+```js
+import '@testing-library/jest-dom';
 ```
 
-## Error Testing
-
-**Current Approach:** Defensive null checks prevent errors gracefully
-
-**Error Cases in Current Code:**
-```javascript
-// PersonStory.jsx
-if(!person) return null;  // Guard clause
-
-// NYCMap.jsx
-if(!cd) return null;      // Missing path data guard
-
-// App.jsx - data lookups with optional chaining
-HOSPITAL_PEOPLE.find(p=>p.id===pid) ?? null
+**Add scripts to `package.json`:**
+```json
+"scripts": {
+  "test": "vitest run",
+  "test:watch": "vitest",
+  "test:coverage": "vitest run --coverage"
+}
 ```
 
-**Error Tests to Add:**
-```javascript
-test('PersonStory returns null when person is null', () => {
-  const { container } = render(<PersonStory person={null} />);
-  expect(container.firstChild).toBeNull();
-});
+## Component Testability Analysis
 
-test('App handles missing district data gracefully', () => {
-  // Test with hovered district that has no CD_PATH
-  // Should not crash rendering
-});
+### Currently Testable (Pure Functions)
+
+**`leColor(le)`** -- line 197 of `src/App.jsx`
+```jsx
+function leColor(le) {
+  return le >= 86 ? "#15803d" : le >= 82 ? "#65a30d" : le >= 79 ? "#eab308" : "#dc2626";
+}
 ```
+Test pattern:
+```js
+import { describe, test, expect } from 'vitest';
 
-## Data-Driven Testing
-
-**Opportunity:** Test color functions and data mappings with parameterized tests
-
-**Example (Vitest):**
-```javascript
-describe.each([
-  [86, "#15803d"],
-  [84, "#65a30d"],
-  [80, "#eab308"],
-  [75, "#dc2626"]
-])('leColor(%i)', (value, expected) => {
-  test(`returns ${expected}`, () => {
-    expect(leColor(value)).toBe(expected);
+describe('leColor', () => {
+  test.each([
+    [90, '#15803d'],   // >= 86 -> dark green
+    [86, '#15803d'],   // boundary: exactly 86
+    [85, '#65a30d'],   // >= 82 -> light green
+    [82, '#65a30d'],   // boundary: exactly 82
+    [80, '#eab308'],   // >= 79 -> yellow
+    [79, '#eab308'],   // boundary: exactly 79
+    [78, '#dc2626'],   // < 79 -> red
+    [70, '#dc2626'],   // well below
+  ])('leColor(%d) returns %s', (input, expected) => {
+    expect(leColor(input)).toBe(expected);
   });
 });
 ```
 
+**`engagementColor(t)`** -- line 198 of `src/App.jsx`
+Same pattern, thresholds at 70/64/58.
+
+**Blocker:** These functions are not exported. To test them, either:
+1. Extract to `src/utils/colors.js` and export (preferred)
+2. Use Vitest's `vi.importActual` with module rewiring (fragile)
+
+### Component Test Targets
+
+**`Pulse` (lines 229-237):**
+- Simple SVG component, ideal for snapshot testing
+- Props: `cx`, `cy`, `r` (default 6), `color` (default RED)
+- Verify: renders 2 circles, animate elements present, default props applied
+
+**`PersonFig` (lines 446-465):**
+- SVG person figure with 3 variants: `"adult"` (default), `"child"`, `"doctor"`
+- Props: `x`, `y`, `color`, `variant`
+- Test: correct SVG elements for each variant, transform applied, color propagated
+
+**`PersonStory` (lines 512-553):**
+- Null guard: `if (!person) return null`
+- Renders person profile + timeline from `person.timeline` array
+- Test: null person returns nothing, person data rendered, timeline events mapped correctly, type colors applied
+
+**`NavBar` (lines 558-633):**
+- Null guard: `if (level < 0) return null`
+- Conditional breadcrumbs for levels 2 and 3
+- Button active states based on level
+- Test: not rendered at level -1, breadcrumbs appear at levels 2/3, button callbacks fire
+
+**`USMap` (lines 402-422):**
+- Renders 50+ hex polygons from `HEX_GRID` + `STATE_DATA`
+- Hover highlights and NY state animation
+- Test: correct number of polygons, hover callback fired, NY click triggers zoom
+
+**`NYCMap` (lines 427-441):**
+- Renders ~59 district paths from `CD_PATHS` + `NYC_DISTRICTS`
+- Target district has pulsing indicator
+- Test: paths rendered, hover callback, target district click triggers zoom
+
+**`HospitalScene` (lines 467-507):**
+- Renders departments as rooms + person figures
+- Hover tooltips for people
+- Test: 4 departments rendered, 4 people rendered, hover shows tooltip, click fires callback
+
+**`LeftPanel` (lines 248-397):**
+- Most complex component -- conditional rendering based on level (0, 1, 2)
+- Shows different legends and hover info per level
+- Calculates best/worst life expectancy from `NYC_DISTRICTS`
+- Test: chapter text matches level, legend varies by level, hover data displays
+
+**`App` (lines 638-730):**
+- Integration test target -- orchestrates all state and transitions
+- `zoomTo` callback with setTimeout-based animation phases
+- Test: starts at level -1, BEGIN button transitions to level 0, navigation between levels works
+
+### Test Challenges
+
+**Monolithic file:** All components are unexported private functions inside `src/App.jsx`. Testing individual components requires either:
+1. **Extraction** -- move components to separate files and export them (the `.planning/ROADMAP.md` plan)
+2. **Integration-only testing** -- test through the App component, which is the only export
+
+**setTimeout animations:** The `zoomTo` function uses nested `setTimeout(cb, 400)` then `setTimeout(cb, 450)`. Tests must use `vi.useFakeTimers()` or `waitFor()` with appropriate timeouts.
+
+**SVG interactivity:** SVG elements use `onMouseEnter`/`onMouseLeave` which are harder to simulate than standard DOM events. Use `fireEvent.mouseEnter()` from Testing Library.
+
+**Large embedded data:** `CD_PATHS` is ~80KB of SVG path strings. Snapshot tests of components using this data will produce enormous snapshots. Consider testing with a subset or mocking the path data.
+
+## Mocking Guidance
+
+**Do NOT mock:**
+- `STATE_DATA`, `NYC_DISTRICTS`, `HOSPITAL_PEOPLE`, `DEPARTMENTS` -- use real data for accuracy tests
+- Color functions -- test actual output values
+- React hooks -- test through component behavior
+
+**Mock when needed:**
+- `setTimeout` -- use `vi.useFakeTimers()` to test zoom transitions
+- Browser APIs if added (fetch, localStorage, geolocation)
+- `CD_PATHS` data in snapshot tests (replace with minimal stub paths)
+
+**Mock pattern for callbacks:**
+```js
+const onHover = vi.fn();
+const onZoomNYC = vi.fn();
+render(<USMap hovered={null} onHover={onHover} onZoomNYC={onZoomNYC} />);
+fireEvent.mouseEnter(screen.getByText('NY').closest('g'));
+expect(onHover).toHaveBeenCalledWith('NY');
+```
+
+## Test Data Factories
+
+**Recommended `src/__fixtures__/testData.js`:**
+```js
+export function makePerson(overrides = {}) {
+  return {
+    id: 'test-person',
+    name: 'Test Person',
+    role: 'Test Role',
+    x: 50, y: 50,
+    color: '#e74c3c',
+    age: 30,
+    bg: 'Test background.',
+    timeline: [
+      { date: 'Jan 2023', type: 'health', title: 'Test event', detail: 'Test detail.' },
+    ],
+    ...overrides,
+  };
+}
+
+export function makeDistrict(overrides = {}) {
+  return {
+    id: 'BK01',
+    name: 'Test District',
+    borough: 'Brooklyn',
+    le: 84.4,
+    vt: 42.6,
+    ...overrides,
+  };
+}
+
+export function makeDepartment(overrides = {}) {
+  return {
+    id: 'test-dept',
+    label: 'Test Dept',
+    x: 14, y: 22, w: 30, h: 28,
+    wait: 28,
+    severity: 'high',
+    note: 'Test note',
+    ...overrides,
+  };
+}
+```
+
+## Coverage
+
+**Current:** Zero test coverage. No coverage tool configured.
+
+**Suggested targets (when tests are added):**
+| Category | Target | Rationale |
+|----------|--------|-----------|
+| Color utility functions | 100% | Pure functions, easy to test, critical for data viz correctness |
+| Data integrity checks | 100% | Verify all 50 states, 59 districts, 4 people have valid fields |
+| Component null guards | 100% | Every `if (!x) return null` path should be tested |
+| Component rendering | 80%+ | SVG complexity makes full coverage impractical |
+| Navigation/transitions | 90% | Core user flow, high-value tests |
+| Hover interactions | 70%+ | SVG events are harder to simulate |
+
+## Test Types
+
+### Unit Tests (Priority: High)
+
+**Scope:** Pure functions and data validation
+
+**What to test:**
+- `leColor()` and `engagementColor()` return correct colors at all boundaries
+- `sevColor` and `typeColor` maps contain expected values
+- All entries in `STATE_DATA` have `name`, `voterTurnout`, `uninsured`, `lifeExp`
+- All entries in `NYC_DISTRICTS` have `id`, `name`, `borough`, `le`, `vt`
+- All entries in `HOSPITAL_PEOPLE` have `id`, `name`, `role`, `timeline` (non-empty array)
+- Every `NYC_DISTRICTS` entry with an `id` has a corresponding `CD_PATHS` entry
+
+### Component Tests (Priority: Medium)
+
+**Scope:** Individual component rendering and interactions
+
+**What to test:**
+- `PersonStory` renders null for null person, renders timeline for valid person
+- `NavBar` renders null at level -1, shows correct breadcrumbs per level
+- `PersonFig` renders correct variant SVG (child vs adult vs doctor)
+- `Pulse` renders animated circles
+
+### Integration Tests (Priority: Medium)
+
+**Scope:** Full App component user flows
+
+**What to test:**
+- App renders title screen at startup (level -1)
+- Clicking BEGIN transitions to US map (level 0)
+- Clicking New York transitions to NYC map (level 1)
+- Clicking pulsing target transitions to hospital (level 2)
+- Clicking a person transitions to story (level 3)
+- Back buttons navigate in reverse
+- NavBar buttons allow direct navigation
+
+**Async pattern for animation tests:**
+```js
+import { render, screen, act } from '@testing-library/react';
+import { vi } from 'vitest';
+
+test('BEGIN button navigates to US map', async () => {
+  vi.useFakeTimers();
+  render(<App />);
+
+  // Level -1: title page
+  fireEvent.click(screen.getByText('BEGIN'));
+
+  // Fast-forward through animation phases
+  act(() => { vi.advanceTimersByTime(400); });  // fade-out completes
+  act(() => { vi.advanceTimersByTime(450); });  // fade-in completes
+
+  // Level 0: US map should be visible
+  expect(screen.getByText('United States Map')).toBeInTheDocument();
+
+  vi.useRealTimers();
+});
+```
+
+### E2E Tests (Priority: Low)
+
+**Not configured.** Consider Playwright for full drill-down flow testing if the app grows more complex or gains API integrations.
+
+## Gaps in Quality Tooling
+
+**Critical gaps:**
+1. **No automated tests** -- any code change can silently break rendering, interactions, or data display
+2. **No type checking** -- JavaScript-only means no compile-time safety for prop shapes or data structures
+3. **No formatting enforcement** -- inconsistent semicolons, quote styles, spacing across files
+
+**Moderate gaps:**
+4. **No accessibility testing** -- SVG maps and interactive elements have no ARIA labels, no keyboard navigation
+5. **No visual regression testing** -- data visualization changes could go unnoticed
+6. **No CI pipeline** -- no automated checks on push or PR
+
+**Low-priority gaps:**
+7. **No bundle size monitoring** -- the ~80KB of SVG path data in `CD_PATHS` dominates bundle size
+8. **No performance monitoring** -- 59 district paths re-rendering on hover could cause jank
+
+## Recommended Testing Roadmap
+
+**Phase 1 -- Foundation (before any refactoring):**
+1. Install Vitest + React Testing Library
+2. Write unit tests for color functions (extract to `src/utils/colors.js`)
+3. Write data integrity tests (validate all datasets)
+4. Write integration test for full navigation flow
+
+**Phase 2 -- Component extraction testing (during ROADMAP decomposition):**
+1. As components are extracted to separate files, add co-located `.test.jsx` files
+2. Test each component's props, rendering, and interactions
+3. Add snapshot tests for SVG components (with small test data)
+
+**Phase 3 -- Quality hardening:**
+1. Add Prettier for formatting consistency
+2. Configure TypeScript (or JSDoc types) for prop validation
+3. Add accessibility testing with axe-core
+4. Set up CI (GitHub Actions) running lint + test + build
+
 ---
 
-*Testing analysis: 2026-03-10*
+*Testing analysis: 2026-03-24*
