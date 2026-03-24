@@ -208,6 +208,7 @@ const HOSPITAL_PEOPLE=[
     x:29,y:36,
     color:"#2980b9",
     bg:"An HIV specialist at a community health center in New York, Dr. Saffo cares for some of the city's most vulnerable patients — navigating daily the intersection of public health, insurance policy, and human dignity. These are her patients' stories.",
+    summary:"She sees how insurance gaps, contract disputes, and state policy differences determine who lives — and carries these stories so others might listen.",
     timeline:[
       {date:"Daily",type:"health",title:"Carrying the weight of these stories",detail:"Dr. Saffo sees the system from the inside. Every discharge, every coverage lapse, every contract dispute — she witnesses them and continues to care for patients anyway."},
       {date:"Ongoing",type:"civic",title:"Documenting systemic failures",detail:"Physicians like Dr. Saffo are often the only witnesses to how insurance gaps and state policy differences determine who lives, who loses their doctor, and who finds a home."},
@@ -222,6 +223,7 @@ const HOSPITAL_PEOPLE=[
     x:60,y:36,
     color:"#e74c3c",
     bg:"He was admitted with pancreatitis — a serious but treatable condition. He was managing his HIV well. That was not the crisis. His Medicaid benefits ran out before he recovered. The hospital discharged him home. He died that night.",
+    summary:"His HIV was managed. His pancreatitis was treatable. His Medicaid ran out. He was discharged before recovery and died that night.",
     timeline:[
       {date:"Admission",type:"health",title:"Admitted for pancreatitis",detail:"A treatable condition. He was managing his HIV well — that was not in crisis. The hospitalization was for pancreatitis."},
       {date:"Mid-stay",type:"civic",title:"Medicaid benefits exhausted",detail:"Coverage ran out before his recovery was complete. No extension was granted. The system had a limit, and he had reached it."},
@@ -236,6 +238,7 @@ const HOSPITAL_PEOPLE=[
     x:72,y:69,
     color:"#8e44ad",
     bg:"Diagnosed with HIV in his mid-20s — rare today, when PrEP has made new infections among young people uncommon. He was struggling with the diagnosis. But he was excited about his care. He was getting comfortable. Then an insurance contract dispute ended all of that.",
+    summary:"He was finally comfortable with his HIV care. Then an insurance contract dispute — nothing to do with his health — took his provider away.",
     timeline:[
       {date:"Last year",type:"health",title:"Diagnosed with HIV in his 20s",detail:"Young people are rarely diagnosed today because of PrEP availability. He was shaken, despondent — but engaging with his care and showing up."},
       {date:"Months in",type:"health",title:"Finding his footing",detail:"He was 'very excited' about his care plan. A good plan, good resources, a provider he trusted. He was stabilizing — medically and emotionally."},
@@ -250,6 +253,7 @@ const HOSPITAL_PEOPLE=[
     x:30,y:69,
     color:"#e67e22",
     bg:"She came to New York pregnant, homeless, and living with HIV. Five children had been removed by child protective services in North Carolina. She was carrying her sixth. New York State's benefits — tied to HIV status and pregnancy — gave her something her home state never had: a home.",
+    summary:"North Carolina took her children and offered no housing. New York, through policy tied to HIV and pregnancy, gave her a home. The difference was not luck — it was legislation.",
     timeline:[
       {date:"North Carolina",type:"civic",title:"Five children removed by CPS",detail:"She was living with HIV in a state with limited support programs. Her children were removed. She had few pathways to stability."},
       {date:"Arrived in NY",type:"health",title:"Homeless and pregnant with her sixth child",detail:"She arrived without housing. Managing HIV. Pregnant. The odds were steep — but New York has policies that other states do not."},
