@@ -27,9 +27,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Data Verification
 
-- [ ] **DATA-01**: All US state stats (voter turnout, uninsured rate, life expectancy) match cited sources exactly
+- [x] **DATA-01**: All US state stats (voter turnout, uninsured rate, life expectancy) match cited sources exactly
 - [ ] **DATA-02**: All NYC district stats (voter turnout, life expectancy) match cited sources exactly
-- [ ] **DATA-03**: Data methodology documented (denominators, election cycles, population definitions) in code comments
+- [x] **DATA-03**: Data methodology documented (denominators, election cycles, population definitions) in code comments
 
 ## v2 Requirements
 
@@ -72,9 +72,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOSP-03 | Phase 3 | Complete |
 | STORY-01 | Phase 1 | Complete |
 | STORY-02 | Phase 4 | Pending |
-| DATA-01 | Phase 4 | Pending |
+| DATA-01 | Phase 4 | Complete |
 | DATA-02 | Phase 4 | Pending |
-| DATA-03 | Phase 4 | Pending |
+| DATA-03 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 12 total

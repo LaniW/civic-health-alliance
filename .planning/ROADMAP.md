@@ -81,7 +81,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Replace all 51 STATE_DATA voterTurnout values with verified UF Election Lab 2020 VEP data, add source methodology comments, update Level 0 citations
+- [x] 04-01-PLAN.md -- Replace all 51 STATE_DATA voterTurnout values with verified UF Election Lab 2020 VEP data, add source methodology comments, update Level 0 citations
 - [ ] 04-02-PLAN.md -- Add NYC_DISTRICTS source comments, fix MN11 LE discrepancy, update Level 1 citations, resolve patient story consent (STORY-02)
 
 ## Progress
