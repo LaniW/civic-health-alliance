@@ -205,9 +205,10 @@ const HOSPITAL_PEOPLE=[
     id:"dr-saffo",
     name:"Dr. Stella Saffo",
     role:"Healthcare Provider, HIV Specialist",
-    x:29,y:36, // Centered in top-left box
+    x:29,y:38,
     color:"#2980b9",
     bg:"A HIV specialist at a health center in New York, Dr. Saffo cares for some of the city's most vulnerable patients, navigating daily the intersection of public health, insurance policy, and human dignity. These are her patients' stories.",
+    summary:"She sees how insurance gaps, contract disputes, and state policy differences determine who lives — and carries these stories so others might listen.",
     timeline:[
       {date:"Daily",type:"health",title:"Carrying the weight of these stories",detail:"Dr. Saffo sees the system from the inside. Every discharge, every coverage lapse, every contract dispute — she witnesses them and continues to care for patients anyway."},
       {date:"Ongoing",type:"civic",title:"Documenting systemic failures",detail:"Healthcare providers like Dr. Saffo are often the only witnesses to how insurance gaps and state policy differences determine who lives, who loses their doctor, and who finds a home."},
@@ -219,9 +220,10 @@ const HOSPITAL_PEOPLE=[
     id:"patient-one",
     name:"A Man With Pancreatitis",
     role:"Medicaid Patient Living With HIV",
-    x:71,y:36, // Centered in top-right box
+    x:71,y:38,
     color:"#e74c3c",
     bg:"He was admitted with pancreatitis — a serious but treatable condition. He was managing his HIV well. That was not the crisis. His Medicaid benefits ran out before he recovered. The hospital discharged him home. He died that night.",
+    summary:"His HIV was managed. His pancreatitis was treatable. His Medicaid ran out. He was discharged before recovery and died that night.",
     timeline:[
       {date:"Admission",type:"health",title:"Admitted for pancreatitis",detail:"A treatable condition. He was managing his HIV well — that was not in crisis. The hospitalization was for pancreatitis."},
       {date:"Mid-stay",type:"civic",title:"Medicaid benefits exhausted",detail:"Coverage ran out before his recovery was complete. No extension was granted. The system had a limit, and he had reached it."},
@@ -233,9 +235,10 @@ const HOSPITAL_PEOPLE=[
     id:"patient-two",
     name:"A Young Man Diagnosed",
     role:"HIV-Positive, Mid-20s",
-    x:29,y:69, // Centered in bottom-left box
+    x:29,y:71,
     color:"#8e44ad",
     bg:"Diagnosed with HIV in his mid-20s, rare today, when PrEP has made new infections among young people uncommon. He was struggling with the diagnosis. But he was excited about his care. He was getting comfortable. Then an insurance contract dispute ended all of that.",
+    summary:"He was finally comfortable with his HIV care. Then an insurance contract dispute — nothing to do with his health — took his provider away.",
     timeline:[
       {date:"Last year",type:"health",title:"Diagnosed with HIV in his 20s",detail:"Young people are rarely diagnosed today because of PrEP availability. He was shaken, despondent, but engaging with his care and showing up."},
       {date:"Months in",type:"health",title:"Finding his footing",detail:"He was 'very excited' about his care plan. A good plan, good resources, a provider he trusted. He was stabilizing — medically and emotionally."},
@@ -247,9 +250,10 @@ const HOSPITAL_PEOPLE=[
     id:"patient-three",
     name:"Pregnant Woman With HIV",
     role:"Formerly Homeless, Mother of Six",
-    x:71,y:69, // Centered in bottom-right box
+    x:71,y:71,
     color:"#e67e22",
     bg:"She came to New York pregnant, homeless, and living with HIV. Five children had been removed by child protective services in North Carolina. She was carrying her sixth. New York State's benefits, tied to HIV status and pregnancy, gave her something her home state never had: a home.",
+    summary:"North Carolina took her children and offered no housing. New York, through policy tied to HIV and pregnancy, gave her a home. The difference was not luck — it was legislation.",
     timeline:[
       {date:"North Carolina",type:"civic",title:"Five children removed by CPS",detail:"She was living with HIV in a state with limited support programs. Her children were removed. She had few pathways to stability."},
       {date:"Arrived in NY",type:"health",title:"Homeless and pregnant with her sixth child",detail:"She arrived without housing. Managing HIV. Pregnant. The odds were steep, but New York has policies that other states do not."},
@@ -541,32 +545,31 @@ function HospitalScene({hoveredPerson,onHoverPerson,onClickPerson,hoveredDept,on
 
       {/* floor divider */}
       <line x1={6} y1={52} x2={94} y2={52} stroke="#c8c3b8" strokeWidth={0.3}/>
-      
-      {/* Shifted floor markers out to x=2.5 so they sit cleanly in the margin */}
-      <text x={2.5} y={19} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>2F</text>
-      <text x={2.5} y={57} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>1F</text>
+      <text x={9} y={19} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>2F</text>
+      <text x={9} y={57} style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#b0a999"}}>1F</text>
 
       {/* departments */}
       {DEPARTMENTS.map(d=>{const isH=hoveredDept===d.id;return(
-        <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)}>
+        <g key={d.id} onMouseEnter={()=>onHoverDept(d.id)} onMouseLeave={()=>onHoverDept(null)} onTouchEnd={()=>onHoverDept(null)} onTouchCancel={()=>onHoverDept(null)}>
           <rect x={d.x} y={d.y} width={d.w} height={d.h} rx={0.8} fill={isH?"#fff":"rgba(255,255,255,0.5)"} stroke={sevColor[d.severity]} strokeWidth={isH?0.7:0.35} strokeDasharray={d.severity==="critical"?"1.2,0.6":"none"} style={{transition:"all 0.15s"}}/>
-          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:1.8,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
+          <text x={d.x+d.w/2} y={d.y+4.5} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#374151",fontWeight:700}}>{d.label}</text>
           {d.metric&&<>
-            <text x={d.x+d.w/2} y={d.y+9} textAnchor="middle" style={{fontSize:2.8,fontFamily:"'JetBrains Mono',monospace",fill:d.severity==="critical"?RED:d.severity==="high"?"#ea580c":"#059669",fontWeight:700}}>{d.metric}</text>
-            <text x={d.x+d.w/2} y={d.y+12} textAnchor="middle" style={{fontSize:1.3,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.metricLabel}</text>
+            <text x={d.x+d.w/2} y={d.y+9} textAnchor="middle" style={{fontSize:3.2,fontFamily:"'JetBrains Mono',monospace",fill:d.severity==="critical"?RED:d.severity==="high"?"#ea580c":"#059669",fontWeight:700}}>{d.metric}</text>
+            <text x={d.x+d.w/2} y={d.y+12} textAnchor="middle" style={{fontSize:1.5,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.metricLabel}</text>
           </>}
-          <text x={d.x+d.w/2} y={d.y+d.h-2.5} textAnchor="middle" style={{fontSize:1.3,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.note}</text>
+          <text x={d.x+d.w/2} y={d.y+d.h-2.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#9ca3af"}}>{d.note}</text>
         </g>);})}
 
       {/* people */}
       {HOSPITAL_PEOPLE.map(p=>(
-        <g key={p.id} onMouseEnter={()=>onHoverPerson(p.id)} onMouseLeave={()=>onHoverPerson(null)} onClick={()=>onClickPerson(p.id)} style={{cursor:"pointer"}}>
+        <g key={p.id} onMouseEnter={()=>onHoverPerson(p.id)} onMouseLeave={()=>onHoverPerson(null)} onTouchEnd={()=>onHoverPerson(null)} onTouchCancel={()=>onHoverPerson(null)} onClick={()=>onClickPerson(p.id)} style={{cursor:"pointer"}}>
+          <rect x={p.x-6} y={p.y-2} width={12} height={12} fill="transparent" style={{cursor:"pointer"}}/>
           <PersonFig x={p.x} y={p.y} color={p.color} variant={p.id==="dr-saffo"?"doctor":"adult"}/>
           <Pulse cx={p.x} cy={p.y-3} r={0.8} color={p.color}/>
           {hoveredPerson===p.id&&<g>
-            <rect x={p.x-35} y={p.y-18} width={70} height={12} rx={1.5} fill="rgba(26,26,26,0.95)" stroke={p.color} strokeWidth={0.25}/>
-            <text x={p.x} y={p.y-13} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
-            <text x={p.x} y={p.y-9.5} textAnchor="middle" style={{fontSize:1.4,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
+            <rect x={p.x-18} y={p.y-16} width={36} height={8} rx={1} fill="rgba(26,26,26,0.93)" stroke={p.color} strokeWidth={0.25}/>
+            <text x={p.x} y={p.y-12} textAnchor="middle" style={{fontSize:2.2,fontFamily:"'Libre Franklin',sans-serif",fill:"#fff",fontWeight:700}}>{p.name}</text>
+            <text x={p.x} y={p.y-9.5} textAnchor="middle" style={{fontSize:1.6,fontFamily:"'JetBrains Mono',monospace",fill:"#d1d5db"}}>{p.role}</text>
           </g>}
         </g>
       ))}
@@ -632,23 +635,21 @@ function PersonStory({person}){
 /* ═══════════════════════════════════════════════════════════════════════════
    NAVBAR
    ═══════════════════════════════════════════════════════════════════════════ */
-function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital}){
+function NavBar({level,onHome,onGoUS,onGoNYC}){
   if(level<0)return null;
 
-  const usActive       = level === 0;
-  const nycActive      = level === 1;
-  const hospitalActive = level >= 2;
+  const usActive  = level===0;
+  const nycActive = level>=1;
 
   const mapBtnBase={
-    display:"flex",height:45,flexDirection:"column",
+    display:"flex",width:208,height:45,flexDirection:"column",
     justifyContent:"center",alignItems:"center",
     border:"none",cursor:"pointer",
     fontFamily:"'Libre Franklin',sans-serif",
-    fontSize:15,fontStyle:"italic",fontWeight:600,
+    fontSize:16,fontStyle:"italic",fontWeight:600,
     lineHeight:"normal",textAlign:"center",
     transition:"background 0.18s,color 0.18s",
     flexShrink:0,
-    padding:"0 20px"
   };
 
   return(
@@ -657,31 +658,34 @@ function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital}){
       height:61,zIndex:100,
       background:"#000",
       display:"flex",alignItems:"center",
-      padding:"0 16px",gap:0,
+      padding:"0 20px",gap:0,
       borderBottom:`2px solid ${RED}`,
-      overflowX:"auto", 
-      whiteSpace:"nowrap"
     }}>
       <button onClick={onHome} style={{
         background:"none",border:"none",
         fontFamily:"'Libre Franklin',sans-serif",
         fontSize:15,fontWeight:900,color:"#f5f5f5",
-        cursor:"pointer",marginRight:16,letterSpacing:0.3,
+        cursor:"pointer",marginRight:20,letterSpacing:0.3,
         whiteSpace:"nowrap",
-        flexShrink:0
-      }}>Civic Health</button>
+      }}>Civic Health Alliance</button>
 
-      <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8,flexShrink:0}}/>
+      <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8}}/>
 
-      <button onClick={onGoUS} style={{...mapBtnBase,background:usActive?RED:"transparent",color:usActive?"#fff":"#888"}}>US Map</button>
-      <button onClick={onGoNYC} style={{...mapBtnBase,background:nycActive?RED:"transparent",color:nycActive?"#fff":"#888"}}>NYC Map</button>
-      <button onClick={onGoHospital} style={{...mapBtnBase,background:hospitalActive?RED:"transparent",color:hospitalActive?"#fff":"#888"}}>Health Center</button>
+      <button onClick={onGoUS} style={{...mapBtnBase,background:usActive?RED:"transparent",color:usActive?"#fff":"#888"}}>United States Map</button>
+      <button onClick={onGoNYC} style={{...mapBtnBase,background:nycActive?RED:"transparent",color:nycActive?"#fff":"#888"}}>New York City Map</button>
 
-      {/* Keeps the Story breadcrumb distinct when viewing a patient's story */}
-      {level === 3 && (
-        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:8,flexShrink:0}}>
+      {level===2&&(
+        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:4}}>
           <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
-          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:14,fontStyle:"italic",color:RED,fontWeight:600}}>Story</span>
+          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:"#f5f5f5",fontWeight:600}}>Health Center</span>
+        </span>
+      )}
+      {level===3&&(
+        <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:4}}>
+          <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
+          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:"#f5f5f5",fontWeight:600}}>Health Center</span>
+          <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
+          <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontStyle:"italic",color:RED,fontWeight:600}}>Story</span>
         </span>
       )}
     </div>
@@ -728,13 +732,7 @@ export default function App(){
         button:hover{opacity:0.88;}
       `}</style>
 
-      <NavBar 
-        level={level} 
-        onHome={()=>zoomTo(-1)} 
-        onGoUS={()=>level!==0&&zoomTo(0)} 
-        onGoNYC={()=>level!==1&&zoomTo(1)} /* Changed from level<1 */
-        onGoHospital={()=>level!==2&&zoomTo(2)} 
-      />
+      <NavBar level={level} onHome={()=>zoomTo(-1)} onGoUS={()=>level!==0&&zoomTo(0)} onGoNYC={()=>level<1&&zoomTo(1)}/>
 
       {/* ── TITLE PAGE ── */}
       {level===-1&&(
