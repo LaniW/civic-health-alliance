@@ -64,7 +64,7 @@ Plans:
 **Goal:** Merge remote branch geometry/content redesign with local Phase 1 summary fields and Phase 3 touch infrastructure into a unified codebase
 **Requirements**: HOSP-01, HOSP-02, HOSP-03, STORY-01
 **Depends on:** Phase 3
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [x] 03.1-01-PLAN.md -- Merge remote DEPARTMENTS geometry, content text, NavBar redesign with local summary fields and touch targets
@@ -94,5 +94,5 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 | 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
 | 2. Touch Navigation | 0/1 | Not started | - |
 | 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
-| 03.1. Remote/Local Merge | 0/1 | Planned | - |
+| 03.1. Remote/Local Merge | 0/1 | Complete    | 2026-03-25 |
 | 4. Real Content and Data Verification | 0/1 | Not started | - |
