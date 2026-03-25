@@ -24,6 +24,8 @@ The visualization must present accurate, real data and stories — real patient 
 - ✓ Hospital scene: person figures centered within their department rooms — Validated in Phase 3: Hospital Scene Layout
 - ✓ Hospital scene: no text overlap between labels/metrics and person figures — Validated in Phase 3: Hospital Scene Layout
 - ✓ Hospital scene: 44px+ touch targets on all person figures — Validated in Phase 3: Hospital Scene Layout
+- ✓ Hospital scene: remote geometry/content merged with local technical features — Validated in Phase 03.1: Remote/Local Merge
+- ✓ NavBar: three-tab navigation (US Map, NYC Map, Health Center) with bidirectional zoom — Validated in Phase 03.1: Remote/Local Merge
 
 ### Active
 
@@ -77,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 3 completion*
+*Last updated: 2026-03-25 after Phase 03.1 completion*
