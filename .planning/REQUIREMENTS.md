@@ -23,12 +23,12 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Stories
 
 - [x] **STORY-01**: PersonStory component uses data fields instead of hard-coded person ID checks
-- [ ] **STORY-02**: Patient stories reflect real experiences from Stella Saffo's clinical transcript (Medicaid/pancreatitis, HIV care continuity, pregnant person housing)
+- [x] **STORY-02**: Patient stories reflect real experiences from Stella Saffo's clinical transcript (Medicaid/pancreatitis, HIV care continuity, pregnant person housing)
 
 ### Data Verification
 
 - [x] **DATA-01**: All US state stats (voter turnout, uninsured rate, life expectancy) match cited sources exactly
-- [ ] **DATA-02**: All NYC district stats (voter turnout, life expectancy) match cited sources exactly
+- [x] **DATA-02**: All NYC district stats (voter turnout, life expectancy) match cited sources exactly
 - [x] **DATA-03**: Data methodology documented (denominators, election cycles, population definitions) in code comments
 
 ## v2 Requirements
@@ -71,9 +71,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOSP-02 | Phase 3 | Complete |
 | HOSP-03 | Phase 3 | Complete |
 | STORY-01 | Phase 1 | Complete |
-| STORY-02 | Phase 4 | Pending |
+| STORY-02 | Phase 4 | Complete |
 | DATA-01 | Phase 4 | Complete |
-| DATA-02 | Phase 4 | Pending |
+| DATA-02 | Phase 4 | Complete |
 | DATA-03 | Phase 4 | Complete |
 
 **Coverage:**
