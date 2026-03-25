@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CONSTANTS & PALETTE
@@ -769,6 +769,27 @@ export default function App(){
     },400);
   },[]);
 
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (phase !== "idle") return;
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    const THRESHOLD = 50;
+    if (deltaX > THRESHOLD && level > 0) zoomTo(level - 1, null);
+    else if (deltaX < -THRESHOLD && level >= 0 && level < 2) zoomTo(level + 1, null);
+  }, [level, phase, zoomTo]);
+
   const anim=phase==="out"
     ?{opacity:0,transform:"scale(1.05)",transition:"all 0.4s cubic-bezier(0.4,0,1,1)"}
     :phase==="in"
@@ -776,7 +797,7 @@ export default function App(){
     :{opacity:1,transform:"scale(1)"};
 
   return(
-    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative",touchAction:"manipulation"}}>
+    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative",touchAction:"manipulation"}} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,700;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;600;700&display=swap');
         *{margin:0;padding:0;box-sizing:border-box;}
