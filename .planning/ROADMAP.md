@@ -78,10 +78,11 @@ Plans:
   2. Every US state stat (voter turnout, uninsured rate, life expectancy) in STATE_DATA matches the cited primary source (MAP VEP turnout, KFF non-elderly uninsured, CDC NVSR life expectancy) exactly
   3. Every NYC district stat (voter turnout, life expectancy) in NYC_DISTRICTS matches the cited primary source (NYC Equity, NYC DOHMH) exactly
   4. Data methodology is documented in code comments: denominator definitions, election cycles, population bases, and specific source table references for every metric
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md -- Replace all 51 STATE_DATA voterTurnout values with verified UF Election Lab 2020 VEP data, add source methodology comments, update Level 0 citations
+- [ ] 04-02-PLAN.md -- Add NYC_DISTRICTS source comments, fix MN11 LE discrepancy, update Level 1 citations, resolve patient story consent (STORY-02)
 
 ## Progress
 
@@ -95,4 +96,4 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 | 2. Touch Navigation | 0/1 | Not started | - |
 | 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
 | 03.1. Remote/Local Merge | 0/1 | Complete    | 2026-03-25 |
-| 4. Real Content and Data Verification | 0/1 | Not started | - |
+| 4. Real Content and Data Verification | 0/2 | Not started | - |
