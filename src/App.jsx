@@ -10,6 +10,21 @@ const CREAM2 = "#FBF9F4";
 /* ═══════════════════════════════════════════════════════════════════════════
    DATA
    ═══════════════════════════════════════════════════════════════════════════ */
+/* --- STATE_DATA -----------------------------------------------------------
+   voterTurnout  -- 2020 General Election VEP Turnout Rate (%)
+                    Source: UF Election Lab (Michael McDonald), v1.2
+                    URL: https://election.lab.ufl.edu/voter-turnout/2020-general-election-turnout/
+                    Denominator: Voting-Eligible Population (citizens 18+, excluding ineligible felons)
+                    Election cycle: November 2020 Presidential General Election
+   uninsured     -- Non-elderly (ages 0-64) uninsured rate (%)
+                    Source: KFF State Health Facts, ACS-based estimates
+                    URL: https://www.kff.org/state-category/health-coverage-uninsured/
+                    Year: 2022/2023 ACS
+   lifeExp       -- Life expectancy at birth, total population (years)
+                    Source: CDC NCHS, U.S. State Life Tables, 2022
+                    Report: NVSR Vol. 74, No. 12 (December 4, 2025), Table A
+                    URL: https://www.cdc.gov/nchs/data/nvsr/nvsr74/nvsr74-12.pdf
+   ------------------------------------------------------------------- */
 const STATE_DATA = {
   AL:{name:"Alabama",voterTurnout:58.9,uninsured:8.2,lifeExp:73.8},
   AK:{name:"Alaska",voterTurnout:63.8,uninsured:11.1,lifeExp:75.8},
