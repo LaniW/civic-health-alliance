@@ -26,13 +26,16 @@ The visualization must present accurate, real data and stories — real patient 
 - ✓ Hospital scene: 44px+ touch targets on all person figures — Validated in Phase 3: Hospital Scene Layout
 - ✓ Hospital scene: remote geometry/content merged with local technical features — Validated in Phase 03.1: Remote/Local Merge
 - ✓ NavBar: three-tab navigation (US Map, NYC Map, Health Center) with bidirectional zoom — Validated in Phase 03.1: Remote/Local Merge
+- ✓ Patient stories reflect real clinical experiences from Stella Saffo transcript (consent confirmed) — Validated in Phase 4: Real Content and Data Verification
+- ✓ All US state voterTurnout values match UF Election Lab 2020 VEP rates — Validated in Phase 4: Real Content and Data Verification
+- ✓ NYC district MN11 life expectancy corrected to match DOHMH CHP 2021 — Validated in Phase 4: Real Content and Data Verification
+- ✓ Source methodology documented in code comments for STATE_DATA and NYC_DISTRICTS — Validated in Phase 4: Real Content and Data Verification
+- ✓ Citation links at Level 0 and Level 1 reference correct primary sources — Validated in Phase 4: Real Content and Data Verification
 
 ### Active
 
 - [ ] NavBar: back arrow button for touch screen navigation
 - [ ] NavBar: tappable breadcrumbs to navigate to any previous level
-- [ ] Replace fictional character stories (Maria, Dr. Okafor, James, Sofia) with real patient stories from Stella Saffo's transcript
-- [ ] Verify all stats in left panel against cited sources (CDC, KFF, MAP, NYC DOHMH)
 
 ### Out of Scope
 
@@ -45,7 +48,7 @@ The visualization must present accurate, real data and stories — real patient 
 - App is a single-file monolith (`src/App.jsx`, ~730 lines) — all data, components, and styling inline
 - Touch screen is a primary use case (likely kiosk/presentation), making back navigation critical
 - Real patient stories come from a transcript by Stella Saffo, a clinician describing 3 patient experiences involving Medicaid/insurance gaps, HIV care continuity, and NY state benefits
-- Stats are sourced from: MAP (voter turnout), KFF (uninsured rate), CDC NVSR (life expectancy), NYC Equity (NYC voter turnout), NYC DOHMH (NYC life expectancy)
+- Stats are sourced from: UF Election Lab (voter turnout, 2020 VEP), KFF ACS (uninsured rate, 2022-2023), CDC NVSR Vol. 74 No. 12 (life expectancy, 2022), NYC CFB (NYC voter turnout, 2020), NYC DOHMH CHP 2021 (NYC life expectancy, 2010-2019 avg)
 
 ## Constraints
 
@@ -58,7 +61,7 @@ The visualization must present accurate, real data and stories — real patient 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Replace fictional stories with real transcript | Authenticity matters — real patient voices are more impactful | — Pending |
+| Replace fictional stories with real transcript | Authenticity matters — real patient voices are more impactful | Done — consent confirmed, stories publish as-is |
 | Back arrow + tappable breadcrumbs (both) | Touch screen users need explicit navigation controls | — Pending |
 
 ## Evolution
@@ -79,4 +82,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after Phase 03.1 completion*
+*Last updated: 2026-03-25 after Phase 4 completion*
