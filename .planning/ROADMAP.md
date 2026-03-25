@@ -59,6 +59,16 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md -- Fix person figure coordinates (centering + overlap) and add invisible touch target rects
 
+### Phase 03.1: address remote and local conflicts (INSERTED)
+
+**Goal:** Merge remote branch geometry/content redesign with local Phase 1 summary fields and Phase 3 touch infrastructure into a unified codebase
+**Requirements**: HOSP-01, HOSP-02, HOSP-03, STORY-01
+**Depends on:** Phase 3
+**Plans:** 1 plan
+
+Plans:
+- [ ] 03.1-01-PLAN.md -- Merge remote DEPARTMENTS geometry, content text, NavBar redesign with local summary fields and touch targets
+
 ### Phase 4: Real Content and Data Verification
 **Goal**: The visualization tells real stories from clinical experience and displays statistics that match their cited primary sources exactly
 **Depends on**: Phase 1, Phase 2, Phase 3
@@ -76,7 +86,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 03.1 -> 4
 Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non-overlapping code regions).
 
 | Phase | Plans Complete | Status | Completed |
@@ -84,4 +94,5 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 | 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
 | 2. Touch Navigation | 0/1 | Not started | - |
 | 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
+| 03.1. Remote/Local Merge | 0/1 | Planned | - |
 | 4. Real Content and Data Verification | 0/1 | Not started | - |
