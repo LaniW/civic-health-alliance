@@ -40,11 +40,12 @@ Plans:
   2. User can tap any breadcrumb segment to jump directly to that level (backward-only; no forward jumps)
   3. All interactive elements respond immediately to touch with no 300ms delay
   4. User can swipe left/right to navigate between adjacent levels
-**Plans**: TBD
+**Plans:** 2 plans
 **UI hint**: yes
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md -- Add NavBar back arrow button, tappable Health Center breadcrumb, onGoLevel prop, and touchAction:manipulation on root
+- [ ] 02-02-PLAN.md -- Add swipe gesture detection, fix USMap/NYCMap sticky hover, size all buttons to 44px touch targets
 
 ### Phase 3: Hospital Scene Layout
 **Goal**: The hospital scene is visually clean -- person figures sit inside their rooms, text is readable, and every figure is tappable on touch screens
@@ -93,7 +94,7 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
-| 2. Touch Navigation | 0/1 | Not started | - |
+| 2. Touch Navigation | 0/2 | Not started | - |
 | 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
 | 03.1. Remote/Local Merge | 0/1 | Complete    | 2026-03-25 |
 | 4. Real Content and Data Verification | 2/2 | Complete   | 2026-03-25 |
