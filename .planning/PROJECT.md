@@ -31,11 +31,14 @@ The visualization must present accurate, real data and stories — real patient 
 - ✓ NYC district MN11 life expectancy corrected to match DOHMH CHP 2021 — Validated in Phase 4: Real Content and Data Verification
 - ✓ Source methodology documented in code comments for STATE_DATA and NYC_DISTRICTS — Validated in Phase 4: Real Content and Data Verification
 - ✓ Citation links at Level 0 and Level 1 reference correct primary sources — Validated in Phase 4: Real Content and Data Verification
+- ✓ NavBar: back arrow button (44px+ touch target) for returning to previous level — Validated in Phase 2: Touch Navigation
+- ✓ NavBar: tappable Health Center breadcrumb at level 3 for backward navigation — Validated in Phase 2: Touch Navigation
+- ✓ touchAction:manipulation on root div eliminates 300ms tap delay — Validated in Phase 2: Touch Navigation
+- ✓ Swipe left/right gesture navigation between adjacent levels — Validated in Phase 2: Touch Navigation
 
 ### Active
 
-- [ ] NavBar: back arrow button for touch screen navigation
-- [ ] NavBar: tappable breadcrumbs to navigate to any previous level
+None — all milestone v1.0 requirements validated.
 
 ### Out of Scope
 
@@ -62,7 +65,7 @@ The visualization must present accurate, real data and stories — real patient 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Replace fictional stories with real transcript | Authenticity matters — real patient voices are more impactful | Done — consent confirmed, stories publish as-is |
-| Back arrow + tappable breadcrumbs (both) | Touch screen users need explicit navigation controls | — Pending |
+| Back arrow + tappable breadcrumbs (both) | Touch screen users need explicit navigation controls | Done — back arrow, breadcrumbs, swipe gestures all implemented |
 
 ## Evolution
 
@@ -82,4 +85,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-25 after Phase 4 completion*
+*Last updated: 2026-03-24 after Phase 2 completion*
