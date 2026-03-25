@@ -9,10 +9,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Navigation
 
-- [ ] **NAV-01**: User can tap a back arrow in the NavBar to return to the previous level (44px+ touch target)
-- [ ] **NAV-02**: User can tap any breadcrumb segment to jump directly to that level (backward-only navigation)
-- [ ] **NAV-03**: All interactive elements use `touch-action: manipulation` to eliminate 300ms tap delay
-- [ ] **NAV-04**: User can swipe left/right to navigate between levels
+- [x] **NAV-01**: User can tap a back arrow in the NavBar to return to the previous level (44px+ touch target)
+- [x] **NAV-02**: User can tap any breadcrumb segment to jump directly to that level (backward-only navigation)
+- [x] **NAV-03**: All interactive elements use `touch-action: manipulation` to eliminate 300ms tap delay
+- [x] **NAV-04**: User can swipe left/right to navigate between levels
 
 ### Hospital Scene
 
@@ -63,10 +63,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-01 | Phase 2 | Pending |
-| NAV-02 | Phase 2 | Pending |
-| NAV-03 | Phase 2 | Pending |
-| NAV-04 | Phase 2 | Pending |
+| NAV-01 | Phase 2 | Complete |
+| NAV-02 | Phase 2 | Complete |
+| NAV-03 | Phase 2 | Complete |
+| NAV-04 | Phase 2 | Complete |
 | HOSP-01 | Phase 3 | Complete |
 | HOSP-02 | Phase 3 | Complete |
 | HOSP-03 | Phase 3 | Complete |
