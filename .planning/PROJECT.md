@@ -2,7 +2,7 @@
 
 ## What This Is
 
-An interactive data visualization that maps the relationship between civic engagement and health outcomes across the US, drilling from national to individual level. Built as a single-page React app with SVG-based maps and animations. Currently being refined for accuracy, touch usability, and real patient stories.
+An interactive data visualization that maps the relationship between civic engagement and health outcomes across the US, drilling from national to individual level. Built as a single-page React app with SVG-based maps and animations. Fully touch-navigable with verified public health data and real patient stories from clinical interviews.
 
 ## Core Value
 
@@ -48,10 +48,11 @@ None — all milestone v1.0 requirements validated.
 
 ## Context
 
-- App is a single-file monolith (`src/App.jsx`, ~730 lines) — all data, components, and styling inline
-- Touch screen is a primary use case (likely kiosk/presentation), making back navigation critical
-- Real patient stories come from a transcript by Stella Saffo, a clinician describing 3 patient experiences involving Medicaid/insurance gaps, HIV care continuity, and NY state benefits
-- Stats are sourced from: UF Election Lab (voter turnout, 2020 VEP), KFF ACS (uninsured rate, 2022-2023), CDC NVSR Vol. 74 No. 12 (life expectancy, 2022), NYC CFB (NYC voter turnout, 2020), NYC DOHMH CHP 2021 (NYC life expectancy, 2010-2019 avg)
+- App is a single-file monolith (`src/App.jsx`, ~867 lines) — all data, components, and styling inline
+- v1.0 shipped: touch navigation (back arrow, breadcrumbs, swipe), verified data, real patient stories
+- Touch screen is a primary use case (kiosk/presentation) — back arrow, breadcrumbs, and swipe gestures all functional
+- Real patient stories from Stella Saffo transcript — 3 patient experiences (Medicaid/pancreatitis, HIV care continuity, pregnant person housing), consent confirmed
+- Stats verified against primary sources: UF Election Lab (voter turnout, 2020 VEP), KFF ACS (uninsured rate, 2022-2023), CDC NVSR Vol. 74 No. 12 (life expectancy, 2022), NYC CFB (NYC voter turnout, 2020), NYC DOHMH CHP 2021 (NYC life expectancy, 2010-2019 avg)
 
 ## Constraints
 
@@ -66,6 +67,9 @@ None — all milestone v1.0 requirements validated.
 |----------|-----------|---------|
 | Replace fictional stories with real transcript | Authenticity matters — real patient voices are more impactful | Done — consent confirmed, stories publish as-is |
 | Back arrow + tappable breadcrumbs (both) | Touch screen users need explicit navigation controls | Done — back arrow, breadcrumbs, swipe gestures all implemented |
+| Swipe capped at level 2 (no swipe into story) | Story selection requires choosing a specific person | Done — swipe left/right between levels 0-2 only |
+| useRef for touch coordinates (not useState) | Mutable refs avoid re-renders during gesture tracking | Done — touchStartX/touchStartY refs in App |
+| Single-file monolith preserved through v1.0 | Minimizes complexity for initial milestone | Done — all 867 LOC in src/App.jsx |
 
 ## Evolution
 
@@ -85,4 +89,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-24 after Phase 2 completion*
+*Last updated: 2026-03-25 after v1.0 milestone*
