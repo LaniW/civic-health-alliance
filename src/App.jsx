@@ -726,6 +726,19 @@ function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital,onGoLevel}){
       {level === 3 && (
         <span style={{display:"flex",alignItems:"center",gap:6,marginLeft:8,flexShrink:0}}>
           <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
+          <button
+            onClick={()=>onGoLevel(2)}
+            style={{
+              background:"none",border:"none",cursor:"pointer",
+              fontFamily:"'Libre Franklin',sans-serif",
+              fontSize:14,fontStyle:"italic",color:"#f5f5f5",fontWeight:600,
+              padding:"0 4px",minHeight:44,
+              display:"flex",alignItems:"center",
+              touchAction:"manipulation",
+            }}
+            aria-label="Go to Health Center"
+          >Health Center</button>
+          <span style={{color:"rgba(255,255,255,0.3)",fontSize:14}}>›</span>
           <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:14,fontStyle:"italic",color:RED,fontWeight:600}}>Story</span>
         </span>
       )}
@@ -763,7 +776,7 @@ export default function App(){
     :{opacity:1,transform:"scale(1)"};
 
   return(
-    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative"}}>
+    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative",touchAction:"manipulation"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,700;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;600;700&display=swap');
         *{margin:0;padding:0;box-sizing:border-box;}
