@@ -663,7 +663,7 @@ function PersonStory({person}){
 /* ═══════════════════════════════════════════════════════════════════════════
    NAVBAR
    ═══════════════════════════════════════════════════════════════════════════ */
-function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital}){
+function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital,onGoLevel}){
   if(level<0)return null;
 
   const usActive       = level === 0;
@@ -701,6 +701,21 @@ function NavBar({level,onHome,onGoUS,onGoNYC,onGoHospital}){
         whiteSpace:"nowrap",
         flexShrink:0
       }}>Civic Health</button>
+
+      {level>0&&(
+        <button
+          onClick={()=>onGoLevel(level-1)}
+          style={{
+            background:"none",border:"none",color:"#f5f5f5",
+            cursor:"pointer",fontFamily:"'Libre Franklin',sans-serif",
+            fontSize:20,fontWeight:700,
+            minWidth:44,minHeight:44,
+            display:"flex",alignItems:"center",justifyContent:"center",
+            marginRight:8,touchAction:"manipulation",
+          }}
+          aria-label="Go back"
+        >&#8592;</button>
+      )}
 
       <div style={{width:1,height:36,background:"rgba(255,255,255,0.15)",marginRight:8,flexShrink:0}}/>
 
@@ -764,6 +779,7 @@ export default function App(){
         onGoUS={()=>level!==0&&zoomTo(0)}
         onGoNYC={()=>level!==1&&zoomTo(1)}
         onGoHospital={()=>level!==2&&zoomTo(2)}
+        onGoLevel={(n)=>zoomTo(n,null)}
       />
 
       {/* ── TITLE PAGE ── */}
