@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Ready to plan
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-24T22:06:32.888Z"
+status: Phase complete — ready for verification
+stopped_at: Completed 03.1-01-PLAN.md
+last_updated: "2026-03-25T00:15:46.106Z"
 progress:
-  total_phases: 4
-  completed_phases: 2
-  total_plans: 2
-  completed_plans: 2
+  total_phases: 5
+  completed_phases: 3
+  total_plans: 3
+  completed_plans: 3
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Accurate, real data and stories -- fully navigable on touch screens
-**Current focus:** Phase 03 — hospital-scene-layout
+**Current focus:** Phase 03.1 — address-remote-and-local-conflicts
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
+Phase: 03.1 (address-remote-and-local-conflicts) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ Plan: Not started
 *Updated after each plan completion*
 | Phase 01-story-data-decoupling P01 | 1 | 2 tasks | 1 files |
 | Phase 03-hospital-scene-layout P01 | 5 | 2 tasks | 1 files |
+| Phase 03.1 P01 | 5min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -62,10 +63,16 @@ Recent decisions affecting current work:
 - [Phase 01-story-data-decoupling]: summary field placed after bg and before timeline in HOSPITAL_PEOPLE; callout box guarded with person.summary falsy check; shared tagline stays hardcoded in PersonStory
 - [Phase 03-hospital-scene-layout]: x/y swap confirmed: patient-one and patient-two had swapped x-coordinates; corrected to match room centers
 - [Phase 03-hospital-scene-layout]: fill='transparent' SVG rects used for touch targets (not fill='none'); transparent receives pointer events, none does not
+- [Phase 03.1]: Adopted remote DEPARTMENTS geometry (w:36, x:11/53) with reordered bottom row
+- [Phase 03.1]: NavBar redesigned from breadcrumbs to three tab buttons with bidirectional navigation
 
 ### Pending Todos
 
 None yet.
+
+### Roadmap Evolution
+
+- Phase 03.1 inserted after Phase 3: address remote and local conflicts (URGENT)
 
 ### Blockers/Concerns
 
@@ -75,6 +82,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T22:03:12.510Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-03-25T00:15:46.105Z
+Stopped at: Completed 03.1-01-PLAN.md
 Resume file: None

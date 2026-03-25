@@ -67,7 +67,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 03.1-01-PLAN.md -- Merge remote DEPARTMENTS geometry, content text, NavBar redesign with local summary fields and touch targets
+- [x] 03.1-01-PLAN.md -- Merge remote DEPARTMENTS geometry, content text, NavBar redesign with local summary fields and touch targets
 
 ### Phase 4: Real Content and Data Verification
 **Goal**: The visualization tells real stories from clinical experience and displays statistics that match their cited primary sources exactly
