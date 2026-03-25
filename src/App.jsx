@@ -147,6 +147,18 @@ const CD_PATHS = {
   "SI03":{p:"M26.1,80.3L25.5,79.9L27.1,78.7L27.6,78.1L29.1,79.1L29.6,79.8L30.2,79.4L30.9,79.1L31.1,78.9L32.4,77.5L30.5,76.4L30.1,77L28.1,75.7L28.7,75.1L28.7,74.4L28.4,74.2L27.7,74.1L27.6,74.4L26.4,74.8L23.4,75.2L21.1,76.1L20.8,76.3L20.6,77.2L20.5,77.5L19.4,77.2L18.2,76.7L18,75.6L17.6,75.5L16.7,74.9L16.2,74.3L16.1,75.2L16,75.2L15.9,74.1L15.4,74.1L14.5,73.7L14.3,74.6L13.8,75L12.9,74.9L12.6,75.3L12,76.8L12,77.3L11.5,78.2L10.9,78.5L9.3,78.3L8.7,78.4L7.4,79.1L7.4,79.5L6.3,80.2L6.1,80.1L5.5,80.5L5.2,81L5.5,81.2L5.8,82L5.6,82.3L6.3,82.8L6.4,83.5L6,84.8L6.2,85L6.2,85.5L6.7,85.8L6.2,86.2L5.9,86.1L5.3,86.7L5.2,86.5L4.4,87.1L4.2,87.9L3.8,88.3L3.9,89.1L4.4,90L5.1,90.7L5.5,90.7L5.8,90.5L6.7,90.5L7.3,89.9L8.4,89.6L8.9,89.5L9.5,89.6L10.5,89.4L10.9,89.2L11.3,88.7L11.6,88.6L12.3,87.7L12.7,87.5L14,87.2L14.2,87.6L15,87.9L15.3,87.7L16.5,86.4L16.9,86L17.7,85.7L18.3,85.9L19.5,85.1L19.7,85.2L21.2,84.3L21.7,84.3L22.3,84L23,83.3L24,82.6L24.4,82.5L25,82L25,81.2L25.7,80.5L26.1,80.3Z",cx:15.6,cy:81.2},
 };
 
+/* --- NYC_DISTRICTS --------------------------------------------------------
+   le  -- Life expectancy at birth (years), 10-year average 2010-2019
+          Source: NYC DOHMH Bureau of Vital Statistics
+          Report: NYC Community Health Profiles 2021
+          URL: https://a816-health.nyc.gov/hdi/profiles/
+          Note: Values are combined over 10 years to increase statistical reliability
+   vt  -- Voter turnout (%) in 2020 General Election
+          Source: NYC Campaign Finance Board Community Profiles
+          URL: https://www.nyccfb.info/nyc-votes/community-profiles/
+          Denominator: Registered voters (NOT voting-eligible population)
+          Election cycle: November 2020 General Election
+   ------------------------------------------------------------------- */
 const NYC_DISTRICTS = [
   {id:"BK01",name:"Williamsburg, Greenpoint",borough:"Brooklyn",le:84.4,vt:42.6},
   {id:"BK02",name:"Fort Greene, Brooklyn Hts",borough:"Brooklyn",le:86.1,vt:52.5},
@@ -188,7 +200,7 @@ const NYC_DISTRICTS = [
   {id:"MN08",name:"Upper East Side",borough:"Manhattan",le:87.4,vt:57.5},
   {id:"MN09",name:"Manhattanville",borough:"Manhattan",le:82.4,vt:36.0},
   {id:"MN10",name:"Central Harlem",borough:"Manhattan",le:76.8,vt:36.8},
-  {id:"MN11",name:"East Harlem",borough:"Manhattan",le:77.9,vt:30.6},
+  {id:"MN11",name:"East Harlem",borough:"Manhattan",le:78.5,vt:30.6},
   {id:"MN12",name:"Washington Heights",borough:"Manhattan",le:84.5,vt:33.3},
   {id:"QN01",name:"Astoria, LIC",borough:"Queens",le:84.0,vt:40.8},
   {id:"QN02",name:"Sunnyside, Woodside",borough:"Queens",le:89.9,vt:40.7},
@@ -407,8 +419,8 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
           ))}
           <div style={{marginTop:10,paddingTop:10,borderTop:"1px solid #e5e1d8"}}>
             <p style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:9,color:"#9ca3af",lineHeight:1.9}}>
-              <a href="https://equity.nyc.gov/domains/empowered-residents-and-neighborhoods/voter-turnout-rate" target="_blank" style={{color:"#518ef6",display:"block"}}>Voter Turnout — NYC Equity, 2024</a>
-              <a href="https://www.nyc.gov/assets/doh/downloads/pdf/vs/2023sum.pdf" target="_blank" style={{color:"#518ef6",display:"block"}}>Life Expectancy — NYC DOHMH, 2023</a>
+              <a href="https://www.nyccfb.info/nyc-votes/community-profiles/" target="_blank" style={{color:"#518ef6",display:"block"}}>Voter Turnout -- NYC CFB Community Profiles, 2020</a>
+              <a href="https://a816-health.nyc.gov/hdi/profiles/" target="_blank" style={{color:"#518ef6",display:"block"}}>Life Expectancy -- NYC DOHMH CHP 2021 (2010-2019 avg)</a>
             </p>
           </div>
         </div>
@@ -421,7 +433,7 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
             <h4 style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:14,fontWeight:800,color:"#1a1a1a"}}>{hovHoodData.name}</h4>
           </div>
           <p style={{fontFamily:"'JetBrains Mono',monospace",fontSize:9,color:"#9ca3af",marginBottom:12}}>{hovHoodData.borough} · {hovHoodData.id}</p>
-          {[["Voter Turnout (2022)",`${hovHoodData.vt}%`,hovHoodData.vt<30],["Life Expectancy",`${hovHoodData.le} yrs`,hovHoodData.le<79]].map(([l,v,bad])=>(
+          {[["Voter Turnout (2020)",`${hovHoodData.vt}%`,hovHoodData.vt<30],["Life Expectancy",`${hovHoodData.le} yrs`,hovHoodData.le<79]].map(([l,v,bad])=>(
             <div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:8,paddingBottom:8,borderBottom:"1px solid #f0ede6"}}>
               <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:11,color:"#6b7280"}}>{l}</span>
               <span style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:13,fontWeight:700,color:bad?RED:"#059669"}}>{v}</span>
