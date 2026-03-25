@@ -44,7 +44,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 02-01-PLAN.md -- Add NavBar back arrow button, tappable Health Center breadcrumb, onGoLevel prop, and touchAction:manipulation on root
+- [x] 02-01-PLAN.md -- Add NavBar back arrow button, tappable Health Center breadcrumb, onGoLevel prop, and touchAction:manipulation on root
 - [ ] 02-02-PLAN.md -- Add swipe gesture detection, fix USMap/NYCMap sticky hover, size all buttons to 44px touch targets
 
 ### Phase 3: Hospital Scene Layout
