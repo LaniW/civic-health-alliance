@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Story Data Decoupling** - Decouple PersonStory from hard-coded person IDs so story content is data-driven (completed 2026-03-24)
 - [ ] **Phase 2: Touch Navigation** - Add back arrow, tappable breadcrumbs, swipe navigation, and touch optimizations to NavBar
 - [x] **Phase 3: Hospital Scene Layout** - Center person figures, fix text overlaps, and add touch-friendly tap targets in the hospital SVG (completed 2026-03-24)
-- [ ] **Phase 4: Real Content and Data Verification** - Replace fictional stories with real patient experiences and verify all stats against cited sources
+- [x] **Phase 4: Real Content and Data Verification** - Replace fictional stories with real patient experiences and verify all stats against cited sources (completed 2026-03-25)
 
 ## Phase Details
 
@@ -40,11 +40,12 @@ Plans:
   2. User can tap any breadcrumb segment to jump directly to that level (backward-only; no forward jumps)
   3. All interactive elements respond immediately to touch with no 300ms delay
   4. User can swipe left/right to navigate between adjacent levels
-**Plans**: TBD
+**Plans:** 2 plans
 **UI hint**: yes
 
 Plans:
-- [ ] 02-01: TBD
+- [x] 02-01-PLAN.md -- Add NavBar back arrow button, tappable Health Center breadcrumb, onGoLevel prop, and touchAction:manipulation on root
+- [ ] 02-02-PLAN.md -- Add swipe gesture detection, fix USMap/NYCMap sticky hover, size all buttons to 44px touch targets
 
 ### Phase 3: Hospital Scene Layout
 **Goal**: The hospital scene is visually clean -- person figures sit inside their rooms, text is readable, and every figure is tappable on touch screens
@@ -78,11 +79,11 @@ Plans:
   2. Every US state stat (voter turnout, uninsured rate, life expectancy) in STATE_DATA matches the cited primary source (MAP VEP turnout, KFF non-elderly uninsured, CDC NVSR life expectancy) exactly
   3. Every NYC district stat (voter turnout, life expectancy) in NYC_DISTRICTS matches the cited primary source (NYC Equity, NYC DOHMH) exactly
   4. Data methodology is documented in code comments: denominator definitions, election cycles, population bases, and specific source table references for every metric
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md -- Replace all 51 STATE_DATA voterTurnout values with verified UF Election Lab 2020 VEP data, add source methodology comments, update Level 0 citations
-- [ ] 04-02-PLAN.md -- Add NYC_DISTRICTS source comments, fix MN11 LE discrepancy, update Level 1 citations, resolve patient story consent (STORY-02)
+- [x] 04-02-PLAN.md -- Add NYC_DISTRICTS source comments, fix MN11 LE discrepancy, update Level 1 citations, resolve patient story consent (STORY-02)
 
 ## Progress
 
@@ -93,7 +94,7 @@ Note: Phases 2 and 3 can run in parallel after Phase 1 completes (they touch non
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Story Data Decoupling | 1/1 | Complete   | 2026-03-24 |
-| 2. Touch Navigation | 0/1 | Not started | - |
+| 2. Touch Navigation | 0/2 | Not started | - |
 | 3. Hospital Scene Layout | 1/1 | Complete   | 2026-03-24 |
 | 03.1. Remote/Local Merge | 0/1 | Complete    | 2026-03-25 |
-| 4. Real Content and Data Verification | 0/2 | Not started | - |
+| 4. Real Content and Data Verification | 2/2 | Complete   | 2026-03-25 |
