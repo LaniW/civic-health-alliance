@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CONSTANTS & PALETTE
@@ -457,7 +457,7 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
           <button onClick={onPrev} style={{
             display:"flex",alignItems:"center",gap:8,
             background:"transparent",border:`1.5px solid ${RED}`,
-            color:RED,padding:"10px 20px",cursor:"pointer",
+            color:RED,padding:"10px 20px",minHeight:44,cursor:"pointer",
             fontFamily:"'Libre Franklin',sans-serif",fontSize:12,fontWeight:700,
             letterSpacing:1,textTransform:"uppercase",
           }}>&#8592; Back</button>
@@ -466,7 +466,7 @@ function LeftPanel({level,hovState,hovHood,onPrev,onNext}){
           <button onClick={onNext} style={{
             display:"flex",alignItems:"center",gap:8,
             background:RED,border:`1.5px solid ${RED}`,
-            color:"#fff",padding:"10px 20px",cursor:"pointer",
+            color:"#fff",padding:"10px 20px",minHeight:44,cursor:"pointer",
             fontFamily:"'Libre Franklin',sans-serif",fontSize:12,fontWeight:700,
             letterSpacing:1,textTransform:"uppercase",
           }}>Next &#8594;</button>
@@ -487,7 +487,7 @@ function USMap({hovered,onHover,onZoomNYC}){
       {Object.entries(HEX_GRID).map(([st,[col,row]])=>{
         const cx=oX+col*pX+(row%2===1?pX/2:0),cy=oY+row*pY;
         const d=STATE_DATA[st],has=!!d,isH=hovered===st,isNY=st==="NY";
-        return(<g key={st} onMouseEnter={()=>has&&onHover(st)} onMouseLeave={()=>onHover(null)} onClick={()=>isNY&&onZoomNYC()} style={{cursor:isNY?"pointer":"default"}}>
+        return(<g key={st} onMouseEnter={()=>has&&onHover(st)} onMouseLeave={()=>onHover(null)} onTouchEnd={()=>onHover(null)} onTouchCancel={()=>onHover(null)} onClick={()=>isNY&&onZoomNYC()} style={{cursor:isNY?"pointer":"default"}}>
           <polygon points={hex(cx,cy)} fill={has?engagementColor(d.voterTurnout):"#e8e4dc"} stroke={isH?"#1a1a1a":"#faf8f3"} strokeWidth={isH?2.5:1.5} opacity={has?(isH?1:0.82):0.3} style={{transition:"all 0.2s"}}/>
           <text x={cx} y={cy+1} textAnchor="middle" dominantBaseline="middle" style={{fontSize:10,fontFamily:"'JetBrains Mono',monospace",fill:has?"#fff":"#b0a999",fontWeight:600,pointerEvents:"none"}}>{st}</text>
         </g>);
@@ -511,7 +511,7 @@ function NYCMap({hovered,onHover,onZoomCenter}){
       {[...NYC_DISTRICTS].sort((a,b)=>(a.id===hovered?1:0)-(b.id===hovered?1:0)).map(n=>{
         const cd=CD_PATHS[n.id];if(!cd)return null;
         const isH=hovered===n.id;
-        return(<g key={n.id} onMouseEnter={()=>onHover(n.id)} onMouseLeave={()=>onHover(null)} onClick={()=>n.isTarget&&onZoomCenter()} style={{cursor:n.isTarget?"pointer":"default"}}>
+        return(<g key={n.id} onMouseEnter={()=>onHover(n.id)} onMouseLeave={()=>onHover(null)} onTouchEnd={()=>onHover(null)} onTouchCancel={()=>onHover(null)} onClick={()=>n.isTarget&&onZoomCenter()} style={{cursor:n.isTarget?"pointer":"default"}}>
           <path d={cd.p} fill={leColor(n.le)} stroke={isH?"#1a1a1a":"rgba(255,255,255,0.5)"} strokeWidth={isH?0.3:0.1} opacity={isH?1:0.85} style={{transition:"all 0.15s"}}/>
           {n.isTarget&&<Pulse cx={cd.cx} cy={cd.cy} r={1.2} color={RED}/>}
         </g>);
@@ -769,6 +769,27 @@ export default function App(){
     },400);
   },[]);
 
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (phase !== "idle") return;
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    const THRESHOLD = 50;
+    if (deltaX > THRESHOLD && level > 0) zoomTo(level - 1, null);
+    else if (deltaX < -THRESHOLD && level >= 0 && level < 2) zoomTo(level + 1, null);
+  }, [level, phase, zoomTo]);
+
   const anim=phase==="out"
     ?{opacity:0,transform:"scale(1.05)",transition:"all 0.4s cubic-bezier(0.4,0,1,1)"}
     :phase==="in"
@@ -776,7 +797,7 @@ export default function App(){
     :{opacity:1,transform:"scale(1)"};
 
   return(
-    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative",touchAction:"manipulation"}}>
+    <div style={{width:"100vw",height:"100vh",overflow:"hidden",background:CREAM,position:"relative",touchAction:"manipulation"}} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,700;0,900;1,400;1,600&family=JetBrains+Mono:wght@400;600;700&display=swap');
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -837,8 +858,8 @@ export default function App(){
         <div style={{...anim,position:"absolute",inset:0,paddingTop:61,overflowY:"auto",background:CREAM}}>
           <PersonStory person={selectedPerson}/>
           <div style={{textAlign:"center",paddingBottom:36,marginTop:8,display:"flex",gap:12,justifyContent:"center"}}>
-            <button onClick={()=>zoomTo(2,null)} style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,padding:"12px 28px",background:"transparent",border:`1.5px solid ${RED}`,color:RED,cursor:"pointer",letterSpacing:1.5,textTransform:"uppercase",fontWeight:700}}>← Back to Health Center</button>
-            <button onClick={()=>zoomTo(-1)} style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,padding:"12px 28px",background:"#1a1a1a",border:"1.5px solid #1a1a1a",color:"#fff",cursor:"pointer",letterSpacing:1.5,textTransform:"uppercase",fontWeight:700}}>Home</button>
+            <button onClick={()=>zoomTo(2,null)} style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,padding:"12px 28px",minHeight:44,background:"transparent",border:`1.5px solid ${RED}`,color:RED,cursor:"pointer",letterSpacing:1.5,textTransform:"uppercase",fontWeight:700,touchAction:"manipulation"}}>← Back to Health Center</button>
+            <button onClick={()=>zoomTo(-1)} style={{fontFamily:"'Libre Franklin',sans-serif",fontSize:12,padding:"12px 28px",minHeight:44,background:"#1a1a1a",border:"1.5px solid #1a1a1a",color:"#fff",cursor:"pointer",letterSpacing:1.5,textTransform:"uppercase",fontWeight:700,touchAction:"manipulation"}}>Home</button>
           </div>
         </div>
       )}
